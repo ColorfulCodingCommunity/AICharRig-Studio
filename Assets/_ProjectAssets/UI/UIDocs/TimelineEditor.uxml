@@ -1,0 +1,13 @@
+<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/_ProjectAssets/UI/USS/TimeLineEditor.uss?fileID=7433441132597879392&amp;guid=794e7fa1b5dd3c642aaea9cd71e340bc&amp;type=3#TimeLineEditor" />
+    <engine:VisualElement name="wrapper" style="flex-grow: 1;">
+        <engine:VisualElement name="timelineWrapper">
+            <engine:VisualElement name="mainPart">
+                <engine:VisualElement name="topBar" />
+                <engine:VisualElement name="mainInfo" style="flex-grow: 1;" />
+            </engine:VisualElement>
+            <engine:VisualElement name="rightButtonsWrapper" />
+        </engine:VisualElement>
+        <engine:VisualElement name="other" style="flex-grow: 1; background-color: rgba(39, 183, 71, 0.57);" />
+    </engine:VisualElement>
+</engine:UXML>

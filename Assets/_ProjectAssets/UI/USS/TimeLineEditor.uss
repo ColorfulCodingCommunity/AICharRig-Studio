@@ -1,0 +1,19 @@
+#timelineWrapper {
+    background-color: rgba(185, 59, 59, 0.79);
+    height: 80%;
+    flex-direction: row;
+}
+
+#rightButtonsWrapper {
+    background-color: rgba(144, 139, 57, 0.65);
+    width: 10%;
+}
+
+#mainPart {
+    width: 90%;
+}
+
+#topBar {
+    height: 79px;
+    background-color: rgba(0, 0, 0, 0.89);
+}
