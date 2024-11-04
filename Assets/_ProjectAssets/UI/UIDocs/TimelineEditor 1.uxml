@@ -5,34 +5,34 @@
             <engine:VisualElement name="frameUtilsWrapper" class="topBarWrapper">
                 <engine:VisualElement name="VisualElement" class="integerField greyText bold smallText" style="flex-direction: row; font-size: 11px;">
                     <engine:Label text="FPS" />
-                    <engine:IntegerField value="10" />
+                    <engine:IntegerField value="10" name="fpsValue" />
                 </engine:VisualElement>
                 <engine:VisualElement name="VisualElement" class="integerField greyText bold smallText" style="flex-direction: row; font-size: 11px;">
                     <engine:Label text="Min" />
-                    <engine:IntegerField value="42" />
+                    <engine:IntegerField value="42" name="minFrame" />
                 </engine:VisualElement>
                 <engine:VisualElement name="VisualElement" class="integerField greyText bold smallText" style="flex-direction: row; font-size: 11px;">
                     <engine:Label text="Max&#10;" />
-                    <engine:IntegerField value="42" />
+                    <engine:IntegerField value="42" name="maxFrame" />
                 </engine:VisualElement>
             </engine:VisualElement>
             <engine:VisualElement name="playerWrapper" class="topBarWrapper">
-                <engine:Button name="play" class="roundedBorder">
+                <engine:Button name="playButton" triple-click-selects-line="false" data-source-type="TimeLineEditor, Assembly-CSharp" class="roundedBorder">
                     <engine:VisualElement style="flex-grow: 1; background-image: url(&quot;project://database/Assets/_ProjectAssets/UI/Textures/play-button-arrowhead.png?fileID=2800000&amp;guid=a3cb1cbf6dc16ae4b8e100326bb6400e&amp;type=3#play-button-arrowhead&quot;);" />
                 </engine:Button>
-                <engine:Button name="pause" class="roundedBorder">
+                <engine:Button name="pauseButton" class="roundedBorder">
                     <engine:VisualElement style="flex-grow: 1; background-image: url(&quot;project://database/Assets/_ProjectAssets/UI/Textures/pause.png?fileID=2800000&amp;guid=e1a89537ac9a5fd4a91ef6455492133c&amp;type=3#pause&quot;);" />
                 </engine:Button>
-                <engine:Button name="stop" class="roundedBorder">
+                <engine:Button name="stopButton" class="roundedBorder">
                     <engine:VisualElement style="flex-grow: 1; background-image: url(&quot;project://database/Assets/_ProjectAssets/UI/Textures/stop-button.png?fileID=2800000&amp;guid=a7884b6e76edcc64eb3d0d73b6af27ff&amp;type=3#stop-button&quot;);" />
                 </engine:Button>
             </engine:VisualElement>
             <engine:VisualElement name="zoomWrapper" class="topBarWrapper">
-                <engine:Slider value="69.4" high-value="100" name="zoomSlider" />
+                <engine:Slider value="69.4" high-value="100" name="zoomSlider" low-value="20" />
             </engine:VisualElement>
         </engine:VisualElement>
-        <engine:VisualElement name="mainContainer">
-            <engine:VisualElement name="animationKeys" data-source-type="TimeLineEditor, Assembly-CSharp">
+        <engine:ScrollView name="mainContainer" mode="Horizontal" focusable="false" horizontal-page-size="4" touch-scroll-type="Elastic">
+            <engine:VisualElement name="animationKeys" data-source-type="TimeLineEditor, Assembly-CSharp" style="width: 627px;">
                 <engine:VisualElement class="animationKey" style="flex-grow: 1;">
                     <engine:Label text="10" />
                     <engine:VisualElement class="verticalLine" style="flex-grow: 1;" />
@@ -49,7 +49,7 @@
                     <engine:Label text="10" />
                     <engine:VisualElement class="verticalLine" style="flex-grow: 1;" />
                 </engine:VisualElement>
-                <engine:VisualElement class="animationKey" style="flex-grow: 1;">
+                <engine:VisualElement class="animationKey">
                     <engine:Label text="10" />
                     <engine:VisualElement class="verticalLine" style="flex-grow: 1;" />
                 </engine:VisualElement>
@@ -96,7 +96,6 @@
                     <engine:VisualElement class="animationLine" />
                 </engine:VisualElement>
             </engine:VisualElement>
-            <engine:VisualElement name="bottomBars" />
-        </engine:VisualElement>
+        </engine:ScrollView>
     </engine:VisualElement>
 </engine:UXML>
