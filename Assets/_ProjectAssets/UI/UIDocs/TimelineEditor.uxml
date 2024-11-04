@@ -1,13 +1,33 @@
 <engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/_ProjectAssets/UI/USS/TimeLineEditor.uss?fileID=7433441132597879392&amp;guid=794e7fa1b5dd3c642aaea9cd71e340bc&amp;type=3#TimeLineEditor" />
     <engine:VisualElement name="wrapper" style="flex-grow: 1;">
+        <engine:VisualElement name="utilsBar">
+            <engine:VisualElement name="VisualElement" style="flex-grow: 1;" />
+            <engine:IntegerField value="42" style="background-color: rgba(255, 8, 8, 0); -unity-background-image-tint-color: rgb(255, 165, 165);" />
+            <engine:IntegerField value="42" style="background-color: rgba(255, 8, 8, 0); -unity-background-image-tint-color: rgb(255, 165, 165);" />
+            <engine:IntegerField value="42" max-length="1000" select-all-on-mouse-up="false" select-all-on-focus="false" vertical-scroller-visibility="Auto" select-line-by-triple-click="false" emoji-fallback-support="false" password="false" enabled="true" name="IntegerField" />
+            <engine:VisualElement name="buttonContainer">
+                <engine:Button text="Button" name="pause" />
+                <engine:Button text="Button" name="play" />
+                <engine:Button text="Button" name="stop" />
+            </engine:VisualElement>
+        </engine:VisualElement>
         <engine:VisualElement name="timelineWrapper">
             <engine:VisualElement name="mainPart">
-                <engine:VisualElement name="topBar" />
-                <engine:VisualElement name="mainInfo" style="flex-grow: 1;" />
+                <engine:VisualElement name="topBar">
+                    <engine:VisualElement style="flex-grow: 1; -unity-text-align: lower-left; flex-direction: column-reverse;">
+                        <engine:Label text="1 ... 24" style="font-size: 15%; color: rgb(168, 163, 163); -unity-text-align: lower-left; justify-content: flex-end;" />
+                    </engine:VisualElement>
+                </engine:VisualElement>
+                <engine:VisualElement name="timeline" style="flex-grow: 1;" />
+                <engine:VisualElement name="other">
+                    <engine:Button text="Baked Layer 0" />
+                    <engine:Button text="Base Image / Video" />
+                </engine:VisualElement>
             </engine:VisualElement>
-            <engine:VisualElement name="rightButtonsWrapper" />
+            <engine:VisualElement name="rightButtonsWrapper">
+                <engine:Slider label="Zoom" value="50.9" high-value="100" name="zoomSlider" direction="Vertical" show-input-field="false" />
+            </engine:VisualElement>
         </engine:VisualElement>
-        <engine:VisualElement name="other" style="flex-grow: 1; background-color: rgba(39, 183, 71, 0.57);" />
     </engine:VisualElement>
 </engine:UXML>

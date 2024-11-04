@@ -1,19 +1,121 @@
 #timelineWrapper {
-    background-color: rgba(185, 59, 59, 0.79);
+    background-color: rgba(255, 255, 255, 0);
     height: 80%;
     flex-direction: row;
 }
 
 #rightButtonsWrapper {
-    background-color: rgba(144, 139, 57, 0.65);
+    background-color: rgb(53, 53, 53);
     width: 10%;
+    justify-content: center;
+    align-items: center;
+    align-self: auto;
+}
+
+#rightButtonsWrapper > Label {
+    font-size: 43%;
+    color: rgb(156, 156, 156);
+    -unity-font-style: bold;
+    -unity-text-align: upper-center;
+    margin-top: 17%;
+    margin-bottom: 17%;
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+    border-bottom-right-radius: 7px;
+    border-bottom-left-radius: 7px;
+}
+
+#zoomSlider {
+    height: 43%;
+    color: rgb(137, 137, 137);
+    font-size: 79%;
+    -unity-text-align: upper-left;
+}
+
+#zoomSlider > VisualElement {
 }
 
 #mainPart {
     width: 90%;
+    background-color: rgb(107, 105, 105);
 }
 
 #topBar {
-    height: 79px;
-    background-color: rgba(0, 0, 0, 0.89);
+    height: 12%;
+    background-color: rgb(53, 53, 53);
+    flex-direction: row;
+    border-left-color: rgba(70, 67, 67, 0);
+    border-right-color: rgba(70, 67, 67, 0);
+    border-top-color: rgba(70, 67, 67, 0);
+    border-bottom-color: rgba(70, 67, 67, 0);
+    -unity-text-align: middle-left;
+    text-overflow: clip;
+    white-space: normal;
+    font-size: 33%;
+}
+
+#buttonContainer {
+    flex-direction: row-reverse;
+    align-items: center;
+}
+
+#buttonContainer > Button {
+    background-color: rgb(103, 99, 99);
+    font-size: 0;
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+    border-bottom-right-radius: 7px;
+    border-bottom-left-radius: 7px;
+    width: 10%;
+    height: 80%;
+    max-width: 40px;
+    min-width: 20px;
+    min-height: 20px;
+    max-height: 40px;
+}
+
+#other {
+    background-color: rgb(156, 156, 156);
+    justify-content: space-between;
+    align-items: stretch;
+    align-self: auto;
+    height: 20%;
+}
+
+#other > Button {
+    height: 45%;
+    font-size: 88%;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    background-color: rgba(118, 118, 118, 0.92);
+}
+
+#utilsBar {
+    flex-direction: row;
+}
+
+#utilsBar > IntegerField {
+    width: 9%;
+    background-color: rgba(255, 8, 8, 0);
+}
+
+#utilsBar > IntegerField > IntegerInput {
+    width: 9%;
+    background-color: rgb(103, 99, 99);
+    border-top-left-radius: 14px;
+    border-top-right-radius: 14px;
+    border-bottom-right-radius: 14px;
+    border-bottom-left-radius: 14px;
 }
