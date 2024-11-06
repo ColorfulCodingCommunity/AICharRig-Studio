@@ -24,7 +24,7 @@ public partial class TimeLineEditor : VisualElement
     [UxmlAttribute("zoomValue")]
     public float zoomValue = 20;
     
-    private VisualElement animationKeys;
+    private VisualElement frameMarkers;
     private VisualElement cursor;
     private float animationKeyWidth = -1;
     
@@ -45,7 +45,7 @@ public partial class TimeLineEditor : VisualElement
     {
         
         //SetAnimationKeys
-        animationKeys = this.Q<VisualElement>("animationKeys");
+        frameMarkers = this.Q<VisualElement>("frameMarkersWrapper");
         SetTimeAnchors();
         
         //SetButtons
@@ -88,19 +88,19 @@ public partial class TimeLineEditor : VisualElement
 
     private void SetTimeAnchors()
     {
-        animationKeys.Clear();
+        frameMarkers.Clear();
 
         for (int i = minFrame; i < maxFrame/10+1; i++)
         {
             var key = new VisualElement();
-            key.AddToClassList("animationKey");
+            key.AddToClassList("frameMarker");
             key.Add(new Label((i*10).ToString()));
             var verticalLine = new VisualElement();
             verticalLine.AddToClassList("verticalLine");
             key.Add(verticalLine);
-            animationKeys.Add(key);
+            frameMarkers.Add(key);
         }
-        animationKeys.style.width = new Length(animationKeyWidth * (zoomValue/200) * animationKeys.childCount, LengthUnit.Pixel);
+        frameMarkers.style.width = new Length(animationKeyWidth * (zoomValue/200) * frameMarkers.childCount, LengthUnit.Pixel);
     }
 
     public void SetCurrentFrame(int frame)
@@ -110,14 +110,12 @@ public partial class TimeLineEditor : VisualElement
     
     public void SetMinFrame(int frame)
     {
-        Debug.Log("min frame: " + frame);
         minFrame = frame;
         SetTimeAnchors();
     }
     
     public void SetMaxFrame(int frame)
     {
-        Debug.Log("max frame: " + frame);
         maxFrame = frame;
         SetTimeAnchors();
     }
@@ -141,16 +139,15 @@ public partial class TimeLineEditor : VisualElement
     
     private void SetCursor()
     {
-        currentFrame++;
         if (currentFrame > maxFrame)
         {
             currentFrame = minFrame;
         }
         
-        if (animationKeys.childCount >= 2)
+        if (frameMarkers.childCount >= 2)
         {
-            var firstKey = animationKeys[0];
-            var lastKey = animationKeys[animationKeys.childCount-1];
+            var firstKey = frameMarkers[0];
+            var lastKey = frameMarkers[frameMarkers.childCount-1];
             
             int firstFrameNumber = int.Parse(firstKey.Q<Label>().text);
             int lastFrameNumber = int.Parse(lastKey.Q<Label>().text);
@@ -194,13 +191,14 @@ public partial class TimeLineEditor : VisualElement
     {
         if (animationKeyWidth == -1)
         {
-            animationKeyWidth = animationKeys.resolvedStyle.width;
+            animationKeyWidth = frameMarkers.resolvedStyle.width;
         }
         zoomValue = value;
-        if (animationKeys != null)
+        if (frameMarkers != null)
         {
-            animationKeys.style.width = new Length(animationKeyWidth * (zoomValue/200) * animationKeys.childCount, LengthUnit.Pixel);
+            frameMarkers.style.width = new Length(animationKeyWidth * (zoomValue/200) * frameMarkers.childCount, LengthUnit.Pixel);
         }
+        SetCursor();
     }
     
     

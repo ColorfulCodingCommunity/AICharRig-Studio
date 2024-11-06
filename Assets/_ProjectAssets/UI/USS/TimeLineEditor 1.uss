@@ -75,14 +75,14 @@
     -unity-font-style: bold;
 }
 
-#animationKeys {
+#frameMarkersWrapper {
     width: 100%;
     height: 80%;
     flex-direction: row;
     justify-content: space-between;
 }
 
-.animationKey {
+.frameMarker {
     height: 100%;
     -unity-text-align: upper-center;
     font-size: 8px;
@@ -95,14 +95,14 @@
     background-color: rgb(123, 123, 123);
 }
 
-.animationLine {
+.animationTrack {
     width: 100%;
     height: 10px;
     background-color: rgba(0, 0, 0, 0.26);
     margin-top: 2px;
 }
 
-#animationLines {
+#animationTracksWrapper {
     padding-top: 24px;
 }
 
