@@ -28,10 +28,21 @@
                 </engine:Button>
             </engine:VisualElement>
             <engine:VisualElement name="zoomWrapper" class="topBarWrapper">
-                <engine:Slider value="69.4" high-value="100" name="zoomSlider" low-value="20" />
+                <engine:Slider value="10" high-value="100" name="zoomSlider" low-value="20" />
             </engine:VisualElement>
         </engine:VisualElement>
-        <engine:ScrollView name="mainContainer" mode="Horizontal" focusable="false" horizontal-page-size="4" touch-scroll-type="Elastic">
+        <engine:ScrollView name="mainContainer" mode="Horizontal" focusable="false" touch-scroll-type="Clamped" horizontal-scroller-visibility="Hidden">
+            <engine:VisualElement name="animationLines" class="overlay">
+                <engine:VisualElement class="animationLine" />
+                <engine:VisualElement class="animationLine" />
+                <engine:VisualElement class="animationLine" />
+                <engine:VisualElement class="animationLine" />
+                <engine:VisualElement class="animationLine" />
+                <engine:VisualElement class="animationLine" />
+                <engine:VisualElement class="animationLine" />
+                <engine:VisualElement class="animationLine" />
+            </engine:VisualElement>
+            <engine:VisualElement name="cursor" class="overlay" />
             <engine:VisualElement name="animationKeys" data-source-type="TimeLineEditor, Assembly-CSharp" style="width: 627px;">
                 <engine:VisualElement class="animationKey" style="flex-grow: 1;">
                     <engine:Label text="10" />
@@ -84,16 +95,6 @@
                 <engine:VisualElement class="animationKey" style="flex-grow: 1;">
                     <engine:Label text="10" />
                     <engine:VisualElement class="verticalLine" style="flex-grow: 1;" />
-                </engine:VisualElement>
-                <engine:VisualElement name="animationLines">
-                    <engine:VisualElement class="animationLine" />
-                    <engine:VisualElement class="animationLine" />
-                    <engine:VisualElement class="animationLine" />
-                    <engine:VisualElement class="animationLine" />
-                    <engine:VisualElement class="animationLine" />
-                    <engine:VisualElement class="animationLine" />
-                    <engine:VisualElement class="animationLine" />
-                    <engine:VisualElement class="animationLine" />
                 </engine:VisualElement>
             </engine:VisualElement>
         </engine:ScrollView>

@@ -103,12 +103,7 @@
 }
 
 #animationLines {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    padding-top: 4%;
+    padding-top: 24px;
 }
 
 #zoomWrapper {
@@ -131,4 +126,19 @@
 
 #zoomSlider {
     width: 80%;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+#cursor {
+    background-color: rgba(255, 0, 0, 0.51);
+    height: 100%;
+    width: 2px;
+    left: 0;
 }

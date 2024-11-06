@@ -7,10 +7,10 @@ using UnityEngine.UIElements;
 public partial class TimeLineEditor : VisualElement
 {
     [UxmlAttribute("currentFrame")]
-    public int currentFrame;
+    public int currentFrame = 0;
     
     [UxmlAttribute("minFrame")]
-    public int minFrame = 1;
+    public int minFrame = 0;
     
     [UxmlAttribute("maxFrame")]
     public int maxFrame = 100;
@@ -22,10 +22,12 @@ public partial class TimeLineEditor : VisualElement
     public bool isPlaying;
     
     [UxmlAttribute("zoomValue")]
-    public float zoomValue;
+    public float zoomValue = 20;
     
     private VisualElement animationKeys;
+    private VisualElement cursor;
     private float animationKeyWidth = -1;
+    
     
     public TimeLineEditor()
     {
@@ -41,11 +43,17 @@ public partial class TimeLineEditor : VisualElement
     
     private void OnAttachedToPanel(AttachToPanelEvent evt)
     {
+        
+        //SetAnimationKeys
+        animationKeys = this.Q<VisualElement>("animationKeys");
+        SetTimeAnchors();
+        
         //SetButtons
         this.Q<Button>("playButton").clickable.clicked += () => Play();
         this.Q<Button>("pauseButton").clickable.clicked += () => Pause();
         this.Q<Button>("stopButton").clickable.clicked += () => Stop();
         
+        zoomValue = this.Q<Slider>("zoomSlider").value;
         this.Q<Slider>("zoomSlider").RegisterValueChangedCallback(evt =>
         {
             SetZoom(evt.newValue);
@@ -71,15 +79,17 @@ public partial class TimeLineEditor : VisualElement
             SetMaxFrame(evt.newValue);
         });
         
+        cursor = this.Q<VisualElement>("cursor");
         
-        //SetAnimationKeys
-        animationKeys = this.Q<VisualElement>("animationKeys");
-        SetTimeAnchors();
+        SetCursor();
+        
+       
     }
 
     private void SetTimeAnchors()
     {
         animationKeys.Clear();
+
         for (int i = minFrame; i < maxFrame/10+1; i++)
         {
             var key = new VisualElement();
@@ -90,8 +100,9 @@ public partial class TimeLineEditor : VisualElement
             key.Add(verticalLine);
             animationKeys.Add(key);
         }
+        animationKeys.style.width = new Length(animationKeyWidth * (zoomValue/200) * animationKeys.childCount, LengthUnit.Pixel);
     }
-   
+
     public void SetCurrentFrame(int frame)
     {
         currentFrame = frame;
@@ -102,7 +113,6 @@ public partial class TimeLineEditor : VisualElement
         Debug.Log("min frame: " + frame);
         minFrame = frame;
         SetTimeAnchors();
-        
     }
     
     public void SetMaxFrame(int frame)
@@ -126,6 +136,45 @@ public partial class TimeLineEditor : VisualElement
     {
         Debug.Log("play");
         SetIsPlaying(true);
+        SetCursor();
+    }
+    
+    private void SetCursor()
+    {
+        currentFrame++;
+        if (currentFrame > maxFrame)
+        {
+            currentFrame = minFrame;
+        }
+        
+        if (animationKeys.childCount >= 2)
+        {
+            var firstKey = animationKeys[0];
+            var lastKey = animationKeys[animationKeys.childCount-1];
+            
+            int firstFrameNumber = int.Parse(firstKey.Q<Label>().text);
+            int lastFrameNumber = int.Parse(lastKey.Q<Label>().text);
+            
+            float firstKeyPos = GetGlobalLeft(firstKey[1]);
+            float lastKeyPos = GetGlobalLeft(lastKey[1]);
+            
+            int numberRatio = lastFrameNumber - firstFrameNumber;
+            float posRatio = lastKeyPos - firstKeyPos;
+            float frameRatio = posRatio / numberRatio;
+
+            cursor.style.left = new Length(((currentFrame-firstFrameNumber) * frameRatio)+firstKeyPos/2, LengthUnit.Pixel);
+        }
+        
+    }
+    
+    private float GetGlobalLeft(VisualElement element)
+    {
+        float left = element.resolvedStyle.left;
+        if (element.parent != null && element.parent!= this)
+        {
+            left += GetGlobalLeft(element.parent);
+        }
+        return left;
     }
     
     public void Pause()
@@ -150,9 +199,7 @@ public partial class TimeLineEditor : VisualElement
         zoomValue = value;
         if (animationKeys != null)
         {
-            Debug.Log("set zoom");
             animationKeys.style.width = new Length(animationKeyWidth * (zoomValue/200) * animationKeys.childCount, LengthUnit.Pixel);
-            Debug.Log(animationKeys.style.width.value);
         }
     }
     
