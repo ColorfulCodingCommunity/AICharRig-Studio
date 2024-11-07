@@ -27,7 +27,8 @@ public partial class TimeLineEditor : VisualElement
     private VisualElement frameMarkers;
     private VisualElement cursor;
     private float animationKeyWidth = -1;
-    
+    private VisualElement animationTracks;
+    private animationKey selectedKey = new animationKey(){frame = -1};
     
     public TimeLineEditor()
     {
@@ -37,15 +38,42 @@ public partial class TimeLineEditor : VisualElement
         var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/_ProjectAssets/UI/USS/TimeLineEditor 1.uss");
         styleSheets.Add(styleSheet);
         
+         
+        
+        frameMarkers = this.Q<VisualElement>("frameMarkersWrapper");
+        cursor = this.Q<VisualElement>("cursor");
+        animationTracks = this.Q<VisualElement>("animationTracksWrapper");
         // Register callback for when the element is added to the panel
         RegisterCallback<AttachToPanelEvent>(OnAttachedToPanel);
     }
     
+    public void DeselectKeyframe()
+    {
+        if (selectedKey.frame != -1)
+        {
+            selectedKey.Deselect();
+            selectedKey.frame = -1;
+        }
+    }
+    
+    public void SelectKeyframe(animationKey key)
+    {
+        DeselectKeyframe();
+        selectedKey = key;
+        key.Select();
+    }
+    
+    private void DeleteKeyFrame()
+    {
+        if (selectedKey.frame != -1)
+        {
+            selectedKey.Delete();
+            selectedKey.frame = -1;
+        }
+    }
     private void OnAttachedToPanel(AttachToPanelEvent evt)
     {
-        
-        //SetAnimationKeys
-        frameMarkers = this.Q<VisualElement>("frameMarkersWrapper");
+       
         SetTimeAnchors();
         
         //SetButtons
@@ -79,11 +107,17 @@ public partial class TimeLineEditor : VisualElement
             SetMaxFrame(evt.newValue);
         });
         
-        cursor = this.Q<VisualElement>("cursor");
-        
         SetCursor();
+        SetTestAnimatonTracks();
         
-       
+        this.RegisterCallback<KeyDownEvent>(evt =>
+        {
+            if (evt.keyCode == KeyCode.X)
+            {
+                DeleteKeyFrame();
+            }
+        });
+        
     }
 
     private void SetTimeAnchors()
@@ -103,38 +137,74 @@ public partial class TimeLineEditor : VisualElement
         frameMarkers.style.width = new Length(animationKeyWidth * (zoomValue/200) * frameMarkers.childCount, LengthUnit.Pixel);
     }
 
+    private void SetTestAnimatonTracks()
+    {
+        animationTracks.Clear();
+        for (int i = 0; i < 10; i++)
+        {
+            var track = new AnimationTrack("Track "+i, this);
+            animationTracks.Add(track);
+            track.AddKeyFrame(Random.Range(minFrame, maxFrame));
+        }
+        
+        SetAllKeyframesPosition();
+    }
+
+    private void SetAllKeyframesPosition()
+    {
+        var firstKey = frameMarkers[0];
+        var lastKey = frameMarkers[frameMarkers.childCount-1];
+            
+        int firstFrameNumber = int.Parse(firstKey.Q<Label>().text);
+        int lastFrameNumber = int.Parse(lastKey.Q<Label>().text);
+            
+        float firstKeyPos = GetGlobalLeft(firstKey[1]);
+        float lastKeyPos = GetGlobalLeft(lastKey[1]);
+            
+        int numberRatio = lastFrameNumber - firstFrameNumber;
+        float posRatio = lastKeyPos - firstKeyPos;
+        float frameRatio = posRatio / numberRatio;
+        
+        
+        foreach (AnimationTrack track in animationTracks.Children())
+        {
+            foreach (animationKey key in track.GetKeyFrames())
+            {
+                key.key.style.left = new Length(((key.frame - firstFrameNumber) * frameRatio) + firstKeyPos / 2 - key.key.style.width.value.value / 2,
+                    LengthUnit.Pixel);
+            }
+        }
+    }
     public void SetCurrentFrame(int frame)
     {
         currentFrame = frame;
     }
     
-    public void SetMinFrame(int frame)
+    private void SetMinFrame(int frame)
     {
         minFrame = frame;
         SetTimeAnchors();
     }
     
-    public void SetMaxFrame(int frame)
+    private void SetMaxFrame(int frame)
     {
         maxFrame = frame;
         SetTimeAnchors();
     }
     
-    public void SetFPS(int fps)
+    private void SetFPS(int fps)
     {
         FPS = fps;
     }
     
-    public void SetIsPlaying(bool playing)
+    private void SetIsPlaying(bool playing)
     {
         isPlaying = playing;
     }
 
-    public void Play()
+    private void Play()
     {
-        Debug.Log("play");
         SetIsPlaying(true);
-        SetCursor();
     }
     
     private void SetCursor()
@@ -199,6 +269,7 @@ public partial class TimeLineEditor : VisualElement
             frameMarkers.style.width = new Length(animationKeyWidth * (zoomValue/200) * frameMarkers.childCount, LengthUnit.Pixel);
         }
         SetCursor();
+        SetAllKeyframesPosition();
     }
     
     

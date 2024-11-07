@@ -63,7 +63,7 @@
 
 .smallText {
     -unity-text-align: middle-center;
-    font-size: -16px;
+    font-size: 9px;
 }
 
 .greyText {
@@ -100,6 +100,8 @@
     height: 10px;
     background-color: rgba(0, 0, 0, 0.26);
     margin-top: 2px;
+    flex-direction: row;
+    align-items: center;
 }
 
 #animationTracksWrapper {
@@ -141,4 +143,35 @@
     height: 100%;
     width: 2px;
     left: 0;
+}
+
+.marginZero {
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+}
+
+.keyFrame {
+    width: 6px;
+    height: 6px;
+    background-color: rgb(204, 162, 5);
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-left-color: rgb(125, 125, 125);
+    border-right-color: rgb(125, 125, 125);
+    border-top-color: rgb(125, 125, 125);
+    border-bottom-color: rgb(125, 125, 125);
+    rotate: 44deg;
+    position: absolute;
+}
+
+.selectedKeyFrame {
+    background-color: rgb(255, 130, 0);
 }

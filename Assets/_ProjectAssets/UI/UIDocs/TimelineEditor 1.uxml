@@ -32,39 +32,33 @@
             </engine:VisualElement>
         </engine:VisualElement>
         <engine:ScrollView name="mainContainer" mode="Horizontal" focusable="false" touch-scroll-type="Clamped" horizontal-scroller-visibility="Hidden">
+            <engine:VisualElement name="frameMarkersWrapper" data-source-type="TimeLineEditor, Assembly-CSharp" style="width: 627px;">
+                <engine:VisualElement enabled="true" class="frameMarker" style="flex-grow: 1;">
+                    <engine:Label text="10" />
+                    <engine:VisualElement class="verticalLine" style="flex-grow: 1;" />
+                </engine:VisualElement>
+                <engine:VisualElement class="frameMarker" style="flex-grow: 1;">
+                    <engine:Label text="10" />
+                    <engine:VisualElement class="verticalLine" style="flex-grow: 1;" />
+                </engine:VisualElement>
+                <engine:VisualElement class="frameMarker" style="flex-grow: 1;">
+                    <engine:Label text="10" />
+                    <engine:VisualElement class="verticalLine" style="flex-grow: 1;" />
+                </engine:VisualElement>
+                <engine:VisualElement class="frameMarker" style="flex-grow: 1;">
+                    <engine:Label text="10" />
+                    <engine:VisualElement class="verticalLine" style="flex-grow: 1;" />
+                </engine:VisualElement>
+                <engine:VisualElement class="frameMarker" style="flex-grow: 1;">
+                    <engine:Label text="10" />
+                    <engine:VisualElement class="verticalLine" style="flex-grow: 1;" />
+                </engine:VisualElement>
+            </engine:VisualElement>
             <engine:VisualElement name="animationTracksWrapper" class="overlay">
-                <engine:VisualElement class="animationTrack" />
-                <engine:VisualElement name="VisualElement" class="animationLine" />
-                <engine:VisualElement class="animationLine" />
-                <engine:VisualElement class="animationLine" />
-                <engine:VisualElement class="animationLine" />
-                <engine:VisualElement class="animationLine" />
-                <engine:VisualElement class="animationLine" />
-                <engine:VisualElement class="animationLine" />
+                <AnimationTrack trackName="rth" />
+                <AnimationTrack trackName="nome" />
             </engine:VisualElement>
             <engine:VisualElement name="cursor" class="overlay" />
-            <engine:VisualElement name="frameMarkersWrapper" data-source-type="TimeLineEditor, Assembly-CSharp" style="width: 627px;">
-                <engine:VisualElement class="frameMarker" style="flex-grow: 1;">
-                    <engine:Label text="10" />
-                    <engine:VisualElement class="verticalLine" style="flex-grow: 1;" />
-                </engine:VisualElement>
-                <engine:VisualElement class="frameMarker" style="flex-grow: 1;">
-                    <engine:Label text="10" />
-                    <engine:VisualElement class="verticalLine" style="flex-grow: 1;" />
-                </engine:VisualElement>
-                <engine:VisualElement class="frameMarker" style="flex-grow: 1;">
-                    <engine:Label text="10" />
-                    <engine:VisualElement class="verticalLine" style="flex-grow: 1;" />
-                </engine:VisualElement>
-                <engine:VisualElement class="frameMarker" style="flex-grow: 1;">
-                    <engine:Label text="10" />
-                    <engine:VisualElement class="verticalLine" style="flex-grow: 1;" />
-                </engine:VisualElement>
-                <engine:VisualElement class="frameMarker" style="flex-grow: 1;">
-                    <engine:Label text="10" />
-                    <engine:VisualElement class="verticalLine" style="flex-grow: 1;" />
-                </engine:VisualElement>
-            </engine:VisualElement>
         </engine:ScrollView>
     </engine:VisualElement>
 </engine:UXML>
