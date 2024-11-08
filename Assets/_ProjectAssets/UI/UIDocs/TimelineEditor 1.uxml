@@ -60,5 +60,6 @@
             </engine:VisualElement>
             <engine:VisualElement name="cursor" class="overlay" />
         </engine:ScrollView>
+        <engine:Label text="0" name="currentFrameLabel" class="mediumText" style="position: absolute; bottom: 0; left: 0;" />
     </engine:VisualElement>
 </engine:UXML>

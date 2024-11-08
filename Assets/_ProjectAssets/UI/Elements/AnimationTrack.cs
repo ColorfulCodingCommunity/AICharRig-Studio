@@ -2,36 +2,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public struct animationKey
-{
-    public int frame;
-    public VisualElement key;
-    public AnimationTrack track;
-    
-    public void Select()
-    {
-        Debug.Log(frame);
-        key.AddToClassList("selectedKeyFrame");
-    }
-    
-    public void Deselect()
-    {
-        key.RemoveFromClassList("selectedKeyFrame");
-    }
-    
-    public void Delete()
-    {
-        track.RemoveKey(frame);
-    }
-}
 
 [UxmlElement("AnimationTrack")]
 public partial class AnimationTrack : VisualElement
 {
     [UxmlAttribute("trackName")]
     public string trackName = "debugName";
-    public List<animationKey> keys = new List<animationKey>();
-    private TimeLineEditor _editor;
+    public List<AnimationKey> keys = new List<AnimationKey>();
+    public TimeLineEditor _editor;
     
     public AnimationTrack(string trackName, TimeLineEditor editor)
     {
@@ -53,39 +31,32 @@ public partial class AnimationTrack : VisualElement
         this.Add(title);
     }
     
+    public int GetFrameFromPosition(float position)
+    {
+        return _editor.GetFrameFromPosition(position);
+    }
+    
     public void AddKeyFrame(int frame)
     {
         var key = new VisualElement();
         key.AddToClassList("keyFrame");
         key.pickingMode = PickingMode.Position;
-        keys.Add(new animationKey { frame = frame, key = key , track = this});
+        keys.Add(new AnimationKey(frame,key,this));
         this.Add(key);
-        key.RegisterCallback<ClickEvent>(evt =>
-        {
-            SelectFrame(frame);
-        });
     }
     
-    private void SelectFrame(int frame)
+    public void SelectKeyFrame(AnimationKey key)
     {
-        foreach (var key in keys)
+        if (keys.Contains(key))
         {
-            if (key.frame == frame)
-            {
-                _editor.SelectKeyframe(key);
-                return;
-            }
+            _editor.SelectKeyframe(key);
+        }
+        else
+        {
+            Debug.LogError("Key not found in track");
         }
     }
-    
-    public void DeselectAllFrames()
-    {
-        foreach (var key in keys)
-        {
-            key.Deselect();
-        }
-    }
-    
+
     public void RemoveKey(int frame)
     {
         for (int i = 0; i < keys.Count; i++)
@@ -99,16 +70,8 @@ public partial class AnimationTrack : VisualElement
         }
     }
     
-    public void ClearKeys()
-    {
-        foreach (var key in keys)
-        {
-            key.key.RemoveFromHierarchy();
-        }
-        keys.Clear();
-    }
     
-    public List<animationKey> GetKeyFrames()
+    public List<AnimationKey> GetKeyFrames()
     {
         return keys;
     }
