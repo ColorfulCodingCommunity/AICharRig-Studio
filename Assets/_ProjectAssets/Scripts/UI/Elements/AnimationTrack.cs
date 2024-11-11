@@ -9,9 +9,9 @@ public partial class AnimationTrack : VisualElement
     [UxmlAttribute("trackName")]
     public string trackName = "debugName";
     public List<AnimationKey> keys = new List<AnimationKey>();
-    public TimeLineEditor _editor;
+    public TimelineEditor _editor;
     
-    public AnimationTrack(string trackName, TimeLineEditor editor)
+    public AnimationTrack(string trackName, TimelineEditor editor)
     {
         this.trackName = trackName;
         this.AddToClassList("animationTrack");

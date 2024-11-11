@@ -3,8 +3,8 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-[UxmlElement("TimeLineEditor")]
-public partial class TimeLineEditor : VisualElement
+[UxmlElement("TimelineEditor")]
+public partial class TimelineEditor : VisualElement
 {
     [UxmlAttribute("currentFrame")]
     public int currentFrame = 0;
@@ -37,13 +37,13 @@ public partial class TimeLineEditor : VisualElement
 
     #region VisualElement
 
-    public TimeLineEditor()
+    public TimelineEditor()
     {
         var visualTree =
-            AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/_ProjectAssets/UI/UIDocs/TimelineEditor 1.uxml");
+            AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/_ProjectAssets/UI/UIDocs/TimelineEditor.uxml");
         visualTree.CloneTree(this);
 
-        var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/_ProjectAssets/UI/USS/TimeLineEditor 1.uss");
+        var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/_ProjectAssets/UI/USS/TimelineEditor.uss");
         styleSheets.Add(styleSheet);
 
         frameMarkers = this.Q<VisualElement>("frameMarkersWrapper");

@@ -1,5 +1,5 @@
 <engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/_ProjectAssets/UI/USS/TimeLineEditor%201.uss?fileID=7433441132597879392&amp;guid=111ec3d398cf9e54ba630311d7464a87&amp;type=3#TimeLineEditor 1" />
+    <Style src="project://database/Assets/_ProjectAssets/UI/USS/TimelineEditor%201.uss?fileID=7433441132597879392&amp;guid=111ec3d398cf9e54ba630311d7464a87&amp;type=3#TimelineEditor 1" />
     <engine:VisualElement name="wrapper" class="fullSize">
         <engine:VisualElement name="topBar">
             <engine:VisualElement name="frameUtilsWrapper" class="topBarWrapper">
@@ -17,7 +17,7 @@
                 </engine:VisualElement>
             </engine:VisualElement>
             <engine:VisualElement name="playerWrapper" class="topBarWrapper">
-                <engine:Button name="playButton" triple-click-selects-line="false" data-source-type="TimeLineEditor, Assembly-CSharp" class="roundedBorder">
+                <engine:Button name="playButton" triple-click-selects-line="false" data-source-type="TimelineEditor, Assembly-CSharp" class="roundedBorder">
                     <engine:VisualElement style="flex-grow: 1; background-image: url(&quot;project://database/Assets/_ProjectAssets/UI/Textures/play-button-arrowhead.png?fileID=2800000&amp;guid=a3cb1cbf6dc16ae4b8e100326bb6400e&amp;type=3#play-button-arrowhead&quot;);" />
                 </engine:Button>
                 <engine:Button name="pauseButton" class="roundedBorder">
@@ -32,7 +32,7 @@
             </engine:VisualElement>
         </engine:VisualElement>
         <engine:ScrollView name="mainContainer" mode="Horizontal" focusable="false" touch-scroll-type="Clamped" horizontal-scroller-visibility="Hidden">
-            <engine:VisualElement name="frameMarkersWrapper" data-source-type="TimeLineEditor, Assembly-CSharp" style="width: 627px;">
+            <engine:VisualElement name="frameMarkersWrapper" data-source-type="TimelineEditor, Assembly-CSharp" style="width: 627px;">
                 <engine:VisualElement enabled="true" class="frameMarker" style="flex-grow: 1;">
                     <engine:Label text="10" />
                     <engine:VisualElement class="verticalLine" style="flex-grow: 1;" />

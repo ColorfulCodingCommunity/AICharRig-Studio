@@ -1,121 +1,177 @@
-#timelineWrapper {
-    background-color: rgba(255, 255, 255, 0);
+.fullSize {
+    width: 100%;
+    height: 100%;
+}
+
+#topBar {
+    height: 35px;
+    width: 100%;
+    background-color: rgb(53, 53, 53);
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+#mainContainer {
+    background-color: rgb(91, 91, 91);
+    height: 90%;
+}
+
+.topBarWrapper {
+    flex-grow: 1;
+    align-items: center;
+    flex-direction: row;
+    width: 33%;
+    justify-content: center;
+    height: 100%;
+}
+
+#playerWrapper > Button {
+    background-color: rgb(119, 119, 119);
+    padding-top: 4px;
+    padding-right: 4px;
+    padding-bottom: 4px;
+    padding-left: 4px;
+    width: 20px;
+    height: 20px;
+}
+
+.roundedBorder {
+    border-top-left-radius: 28%;
+    border-top-right-radius: 28%;
+    border-bottom-right-radius: 28%;
+    border-bottom-left-radius: 28%;
+}
+
+.integerField {
+}
+
+.unity-integer-field__input {
+    padding-top: 4px;
+    padding-right: 4px;
+    padding-bottom: 4px;
+    padding-left: 4px;
+    background-color: rgb(65, 65, 65);
+    border-top-left-radius: 20%;
+    border-top-right-radius: 20%;
+    border-bottom-right-radius: 20%;
+    border-bottom-left-radius: 20%;
+}
+
+.mediumText {
+    -unity-text-align: middle-center;
+}
+
+.smallText {
+    -unity-text-align: middle-center;
+    font-size: 9px;
+}
+
+.greyText {
+    color: rgb(147, 146, 146);
+    -unity-font-style: normal;
+}
+
+.bold {
+    -unity-font-style: bold;
+}
+
+#frameMarkersWrapper {
+    width: 100%;
     height: 80%;
     flex-direction: row;
+    justify-content: space-between;
 }
 
-#rightButtonsWrapper {
-    background-color: rgb(53, 53, 53);
-    width: 10%;
-    justify-content: center;
-    align-items: center;
-    align-self: auto;
-}
-
-#rightButtonsWrapper > Label {
-    font-size: 43%;
-    color: rgb(156, 156, 156);
-    -unity-font-style: bold;
+.frameMarker {
+    height: 100%;
     -unity-text-align: upper-center;
-    margin-top: 17%;
-    margin-bottom: 17%;
+    font-size: 8px;
+    align-items: center;
+}
+
+.verticalLine {
+    width: 1px;
+    height: 100%;
+    background-color: rgb(123, 123, 123);
+}
+
+.animationTrack {
+    width: 100%;
+    height: 10px;
+    background-color: rgba(0, 0, 0, 0.26);
+    margin-top: 2px;
+    flex-direction: row;
+    align-items: center;
+}
+
+#animationTracksWrapper {
+    padding-top: 24px;
+}
+
+#zoomWrapper {
+}
+
+#unity-dragger {
+    background-color: rgb(217, 217, 217);
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+    border-top-left-radius: 11px;
+    border-top-right-radius: 11px;
+    border-bottom-right-radius: 11px;
+    border-bottom-left-radius: 11px;
+    width: 10px;
+    height: 10px;
+    margin-top: -2%;
+}
+
+#zoomSlider {
+    width: 80%;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+#cursor {
+    background-color: rgba(255, 0, 0, 0.51);
+    height: 100%;
+    width: 2px;
+    left: 0;
+}
+
+.marginZero {
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+}
+
+.keyFrame {
+    width: 6px;
+    height: 6px;
+    background-color: rgb(204, 162, 5);
     border-top-width: 1px;
     border-right-width: 1px;
     border-bottom-width: 1px;
     border-left-width: 1px;
-    border-left-color: rgb(0, 0, 0);
-    border-right-color: rgb(0, 0, 0);
-    border-top-color: rgb(0, 0, 0);
-    border-bottom-color: rgb(0, 0, 0);
-    border-top-left-radius: 7px;
-    border-top-right-radius: 7px;
-    border-bottom-right-radius: 7px;
-    border-bottom-left-radius: 7px;
+    border-left-color: rgb(125, 125, 125);
+    border-right-color: rgb(125, 125, 125);
+    border-top-color: rgb(125, 125, 125);
+    border-bottom-color: rgb(125, 125, 125);
+    rotate: 44deg;
+    position: absolute;
 }
 
-#zoomSlider {
-    height: 43%;
-    color: rgb(137, 137, 137);
-    font-size: 79%;
-    -unity-text-align: upper-left;
-}
-
-#zoomSlider > VisualElement {
-}
-
-#mainPart {
-    width: 90%;
-    background-color: rgb(107, 105, 105);
-}
-
-#topBar {
-    height: 12%;
-    background-color: rgb(53, 53, 53);
-    flex-direction: row;
-    border-left-color: rgba(70, 67, 67, 0);
-    border-right-color: rgba(70, 67, 67, 0);
-    border-top-color: rgba(70, 67, 67, 0);
-    border-bottom-color: rgba(70, 67, 67, 0);
-    -unity-text-align: middle-left;
-    text-overflow: clip;
-    white-space: normal;
-    font-size: 33%;
-}
-
-#buttonContainer {
-    flex-direction: row-reverse;
-    align-items: center;
-}
-
-#buttonContainer > Button {
-    background-color: rgb(103, 99, 99);
-    font-size: 0;
-    border-top-width: 2px;
-    border-right-width: 2px;
-    border-bottom-width: 2px;
-    border-left-width: 2px;
-    border-top-left-radius: 7px;
-    border-top-right-radius: 7px;
-    border-bottom-right-radius: 7px;
-    border-bottom-left-radius: 7px;
-    width: 10%;
-    height: 80%;
-    max-width: 40px;
-    min-width: 20px;
-    min-height: 20px;
-    max-height: 40px;
-}
-
-#other {
-    background-color: rgb(156, 156, 156);
-    justify-content: space-between;
-    align-items: stretch;
-    align-self: auto;
-    height: 20%;
-}
-
-#other > Button {
-    height: 45%;
-    font-size: 88%;
-    -unity-font-style: bold;
-    -unity-text-align: middle-center;
-    background-color: rgba(118, 118, 118, 0.92);
-}
-
-#utilsBar {
-    flex-direction: row;
-}
-
-#utilsBar > IntegerField {
-    width: 9%;
-    background-color: rgba(255, 8, 8, 0);
-}
-
-#utilsBar > IntegerField > IntegerInput {
-    width: 9%;
-    background-color: rgb(103, 99, 99);
-    border-top-left-radius: 14px;
-    border-top-right-radius: 14px;
-    border-bottom-right-radius: 14px;
-    border-bottom-left-radius: 14px;
+.selectedKeyFrame {
+    background-color: rgb(255, 130, 0);
 }
