@@ -25,8 +25,6 @@ public class AnimationKey
         key.RegisterCallback<MouseUpEvent>(OnMouseUp);
         key.RegisterCallback<MouseMoveEvent>(OnMouseMove);
         key.RegisterCallback<MouseLeaveEvent>(OnMouseLeave);
-        
-        
     }
 
     private void OnMouseLeave(MouseLeaveEvent evt)
@@ -76,7 +74,6 @@ public class AnimationKey
     
     private void Select(ClickEvent evt)
     {
-        Debug.Log("Select" + frame);
         key.AddToClassList("selectedKeyFrame");
         track.SelectKeyFrame(this);
     }

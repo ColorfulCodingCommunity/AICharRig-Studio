@@ -33,10 +33,30 @@ public class TimelineManager : MonoBehaviour
             }
         }
     }
+    //TODO:
+    public void AddTrack(FloatTrackData floatTrackData)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void RemoveTrack(FloatTrackData floatTrackData)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void AddKeyframe(FloatTrackData floatTrackData, KeyframeData<float> keyframe)
+    {
+        throw new NotImplementedException();
+    }
+
+    //public void MoveKeyframe(...)
+    //{
+    //    throw new NotImplementedException();
+    //}
 
     private void Delete(InputAction.CallbackContext obj)
     {
-        _timeLineEditor.DeleteKeyFrame();
+        _timeLineEditor.DeleteKeyframe();
     }
 }
 

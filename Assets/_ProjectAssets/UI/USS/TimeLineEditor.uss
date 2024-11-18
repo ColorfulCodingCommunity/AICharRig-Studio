@@ -102,6 +102,9 @@
     margin-top: 2px;
     flex-direction: row;
     align-items: center;
+
+    padding-top: 8px;
+    padding-bottom: 8px;
 }
 
 #animationTracksWrapper {

@@ -24,16 +24,17 @@ public partial class TimelineEditor : VisualElement
     [UxmlAttribute("zoomValue")]
     public float zoomValue = 20;
 
-    private VisualElement frameMarkers;
-    private VisualElement cursor;
-    private float animationKeyWidth = -1;
-    private VisualElement animationTracks;
-    private AnimationKey selectedKey = new AnimationKey(-1, null, null);
-    private Label currentFrameLabel;
+    private VisualElement _frameMarkersWrapper;
+    private float _frameMarkerWidth = -1;
 
+    private VisualElement _cursor;
+    private VisualElement _animationTracksWrapper;
+    private Label _currentFrameLabel;
 
-    private float frameRatio;
-    private float leftPadding;
+    private AnimationKey selectedKeyframe = new AnimationKey(-1, null, null);
+
+    private float _frameRatio;
+    private float _leftPadding;
 
     #region VisualElement
 
@@ -46,12 +47,11 @@ public partial class TimelineEditor : VisualElement
         var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/_ProjectAssets/UI/USS/TimelineEditor.uss");
         styleSheets.Add(styleSheet);
 
-        frameMarkers = this.Q<VisualElement>("frameMarkersWrapper");
-        cursor = this.Q<VisualElement>("cursor");
-        animationTracks = this.Q<VisualElement>("animationTracksWrapper");
-        currentFrameLabel = this.Q<Label>("currentFrameLabel");
+        _frameMarkersWrapper = this.Q<VisualElement>("frameMarkersWrapper");
+        _cursor = this.Q<VisualElement>("cursor");
+        _animationTracksWrapper = this.Q<VisualElement>("animationTracksWrapper");
+        _currentFrameLabel = this.Q<Label>("currentFrameLabel");
 
-        // Register callback for when the element is added to the panel
         RegisterCallback<AttachToPanelEvent>(OnAttachedToPanel);
     }
 
@@ -87,11 +87,11 @@ public partial class TimelineEditor : VisualElement
 
     private void SetTestAnimatonTracks()
     {
-        animationTracks.Clear();
+        _animationTracksWrapper.Clear();
         for (int i = 0; i < 10; i++)
         {
             var track = new AnimationTrack("Track " + i, this);
-            animationTracks.Add(track);
+            _animationTracksWrapper.Add(track);
             track.AddKeyFrame(Random.Range(minFrame, maxFrame));
         }
 
@@ -100,33 +100,35 @@ public partial class TimelineEditor : VisualElement
     
     private void SetTimeMarkers()
     {
-        frameMarkers.Clear();
+        _frameMarkersWrapper.Clear();
 
         for (int i = minFrame; i < maxFrame / 10 + 1; i++)
         {
             var marker = new VisualElement();
             marker.AddToClassList("frameMarker");
             marker.Add(new Label((i * 10).ToString()));
+
             var verticalLine = new VisualElement();
             verticalLine.AddToClassList("verticalLine");
+
             marker.Add(verticalLine);
-            frameMarkers.Add(marker);
+            _frameMarkersWrapper.Add(marker);
         }
 
-        frameMarkers.style.width =
-            new Length(animationKeyWidth * (zoomValue / 200) * frameMarkers.childCount, LengthUnit.Pixel);
+        _frameMarkersWrapper.style.width =
+            new Length(_frameMarkerWidth * (zoomValue / 200) * _frameMarkersWrapper.childCount, LengthUnit.Pixel);
     }
     
     private void SetAllKeyframesPosition()
     {
         ReadFrameMarkers();
         
-        foreach (AnimationTrack track in animationTracks.Children())
+        foreach (AnimationTrack track in _animationTracksWrapper.Children())
         {
             foreach (AnimationKey key in track.GetKeyFrames())
             {
                 key.key.style.left = new Length(
-                    ((key.frame - minFrame) * frameRatio) + leftPadding / 2 -
+                    ((key.frame - minFrame) * _frameRatio) + _leftPadding / 2 -
                     key.key.style.width.value.value / 2,
                     LengthUnit.Pixel);
             }
@@ -150,22 +152,22 @@ public partial class TimelineEditor : VisualElement
 
         ReadFrameMarkers();
 
-        cursor.style.left = new Length(((currentFrame - minFrame) * frameRatio) + leftPadding / 2,
+        _cursor.style.left = new Length(((currentFrame - minFrame) * _frameRatio) + _leftPadding / 2,
             LengthUnit.Pixel);
-        currentFrameLabel.text = currentFrame.ToString();
+        _currentFrameLabel.text = currentFrame.ToString();
     }
     
     public void SetZoom(float value)
     {
-        if (animationKeyWidth == -1)
+        if (_frameMarkerWidth == -1)
         {
-            animationKeyWidth = frameMarkers.resolvedStyle.width;
+            _frameMarkerWidth = _frameMarkersWrapper.resolvedStyle.width;
         }
 
         zoomValue = value;
-        if (frameMarkers != null)
+        if (_frameMarkersWrapper != null)
         {
-            frameMarkers.style.width = new Length(animationKeyWidth * (zoomValue / 200) * frameMarkers.childCount,
+            _frameMarkersWrapper.style.width = new Length(_frameMarkerWidth * (zoomValue / 200) * _frameMarkersWrapper.childCount,
                 LengthUnit.Pixel);
         }
 
@@ -173,13 +175,13 @@ public partial class TimelineEditor : VisualElement
         SetAllKeyframesPosition();
     }
 
-    #region KeyFrames
+    #region Keyframes
 
     private void DeselectKeyframe()
     {
-        if (selectedKey.frame != -1)
+        if (selectedKeyframe.frame != -1)
         {
-            selectedKey.Deselect();
+            selectedKeyframe.Deselect();
         }
     }
 
@@ -187,16 +189,16 @@ public partial class TimelineEditor : VisualElement
     public void SelectKeyframe(AnimationKey key)
     {
         DeselectKeyframe();
-        selectedKey = key;
+        selectedKeyframe = key;
         
     }
 
-    public void DeleteKeyFrame()
+    public void DeleteKeyframe()
     {
-        if (selectedKey.frame != -1)
+        if (selectedKeyframe.frame != -1)
         {
-            selectedKey.Delete();
-            selectedKey.frame = -1;
+            selectedKeyframe.Delete();
+            selectedKeyframe.frame = -1;
         }
     }
 
@@ -246,8 +248,8 @@ public partial class TimelineEditor : VisualElement
     
     private void ReadFrameMarkers()
     {
-        var firstKey = frameMarkers[0];
-        var lastKey = frameMarkers[frameMarkers.childCount - 1];
+        var firstKey = _frameMarkersWrapper[0];
+        var lastKey = _frameMarkersWrapper[_frameMarkersWrapper.childCount - 1];
 
         int firstFrameNumber = int.Parse(firstKey.Q<Label>().text);
         int lastFrameNumber = int.Parse(lastKey.Q<Label>().text);
@@ -257,14 +259,14 @@ public partial class TimelineEditor : VisualElement
 
         int numberRatio = lastFrameNumber - firstFrameNumber;
         float posRatio = lastKeyPos - firstKeyPos;
-        frameRatio = posRatio / numberRatio;
-        leftPadding = firstKeyPos;
+        _frameRatio = posRatio / numberRatio;
+        _leftPadding = firstKeyPos;
     }
     
     public int GetFrameFromPosition(float position)
     {
         ReadFrameMarkers();
-        return (int) ((position - leftPadding) / frameRatio) + minFrame;
+        return (int) ((position - _leftPadding) / _frameRatio) + minFrame;
     }
     
     private float GetGlobalLeft(VisualElement element)
