@@ -105,10 +105,13 @@ public partial class TimelineEditor : VisualElement
         for (int i = minFrame; i < maxFrame / 10 + 1; i++)
         {
             var marker = new VisualElement();
+            marker.pickingMode = PickingMode.Ignore;
+
             marker.AddToClassList("frameMarker");
             marker.Add(new Label((i * 10).ToString()));
 
             var verticalLine = new VisualElement();
+            verticalLine.pickingMode = PickingMode.Ignore;
             verticalLine.AddToClassList("verticalLine");
 
             marker.Add(verticalLine);

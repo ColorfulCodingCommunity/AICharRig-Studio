@@ -1,3 +1,17 @@
+:root{
+    --bg-dark-color: rgb(53, 53, 53);
+    --bg-light-color: rgb(91, 91, 91);
+    --black-color: rgb(10, 10, 10);
+    --white-color: rgb(217, 217, 217);
+    --red-color: rgb(255, 15, 100);
+    --yellow-key-color: rgb(255, 255, 0);
+    --selected-key-color: rgb(255, 130, 0);
+       /* -unity-font-definition: resource('Fonts/OpenSans-Regular SDF'); */
+
+    --font-small: 9px;
+    --font-mid: 12px;
+}
+
 .fullSize {
     width: 100%;
     height: 100%;
@@ -6,13 +20,13 @@
 #topBar {
     height: 35px;
     width: 100%;
-    background-color: rgb(53, 53, 53);
+    background-color: var(--bg-dark-color);
     flex-direction: row;
     justify-content: space-between;
 }
 
 #mainContainer {
-    background-color: rgb(91, 91, 91);
+    background-color: var(--bg-light-color);
     height: 90%;
 }
 
@@ -26,7 +40,7 @@
 }
 
 #playerWrapper > Button {
-    background-color: rgb(119, 119, 119);
+    background-color: var(--bg-light-color);
     padding-top: 4px;
     padding-right: 4px;
     padding-bottom: 4px;
@@ -50,7 +64,7 @@
     padding-right: 4px;
     padding-bottom: 4px;
     padding-left: 4px;
-    background-color: rgb(65, 65, 65);
+    background-color: var(--bg-light-color);
     border-top-left-radius: 20%;
     border-top-right-radius: 20%;
     border-bottom-right-radius: 20%;
@@ -63,11 +77,14 @@
 
 .smallText {
     -unity-text-align: middle-center;
-    font-size: 9px;
+    font-size: var(--font-small);
+}
+.midText{
+    font-size: var(--font-mid);
 }
 
 .greyText {
-    color: rgb(147, 146, 146);
+    color: var(--white-color);
     -unity-font-style: normal;
 }
 
@@ -85,26 +102,29 @@
 .frameMarker {
     height: 100%;
     -unity-text-align: upper-center;
-    font-size: 8px;
+    font-size: var(--font-small);
     align-items: center;
 }
 
 .verticalLine {
     width: 1px;
     height: 100%;
-    background-color: rgb(123, 123, 123);
+    background-color: var(--bg-light-color);
 }
 
 .animationTrack {
     width: 100%;
     height: 10px;
-    background-color: rgba(0, 0, 0, 0.26);
-    margin-top: 2px;
+    background-color: var(--bg-dark-color);
+    margin-top: 1px;
     flex-direction: row;
     align-items: center;
 
     padding-top: 8px;
     padding-bottom: 8px;
+
+    color: var(--white-color);
+    font-size: var(--font-small);
 }
 
 #animationTracksWrapper {
@@ -115,18 +135,13 @@
 }
 
 #unity-dragger {
-    background-color: rgb(217, 217, 217);
-    border-left-color: rgba(0, 0, 0, 0);
-    border-right-color: rgba(0, 0, 0, 0);
-    border-top-color: rgba(0, 0, 0, 0);
-    border-bottom-color: rgba(0, 0, 0, 0);
-    border-top-left-radius: 11px;
-    border-top-right-radius: 11px;
-    border-bottom-right-radius: 11px;
-    border-bottom-left-radius: 11px;
+    background-color: var(--white-color);
+    border-width: 0px;
+    border-radius: 50%;
     width: 10px;
     height: 10px;
-    margin-top: -2%;
+    position: absolute;
+    margin-top: -5px;
 }
 
 #zoomSlider {
@@ -142,9 +157,9 @@
 }
 
 #cursor {
-    background-color: rgba(255, 0, 0, 0.51);
+    background-color: var(--red-color);
     height: 100%;
-    width: 2px;
+    width: 1px;
     left: 0;
 }
 
@@ -162,19 +177,13 @@
 .keyFrame {
     width: 6px;
     height: 6px;
-    background-color: rgb(204, 162, 5);
-    border-top-width: 1px;
-    border-right-width: 1px;
-    border-bottom-width: 1px;
-    border-left-width: 1px;
-    border-left-color: rgb(125, 125, 125);
-    border-right-color: rgb(125, 125, 125);
-    border-top-color: rgb(125, 125, 125);
-    border-bottom-color: rgb(125, 125, 125);
-    rotate: 44deg;
+    background-color: var(--yellow-key-color);
+    border-width: 1px;
+    border-color: var(--black-color);
+    rotate: 45deg;
     position: absolute;
 }
 
 .selectedKeyFrame {
-    background-color: rgb(255, 130, 0);
+    background-color: var(--selected-key-color);
 }
