@@ -13,33 +13,33 @@ MonoBehaviour:
   m_Name: TrackData
   m_EditorClassIdentifier: 
   floatTracks:
-  - trackName: Bone12
-    keyframes:
-    - frameIndex: 17
-      value: 0
-    - frameIndex: 85
-      value: 0
-    rangeKeyframes:
-    - startKeyframe:
-        frameIndex: 10
-        value: 0
-      endKeyframe:
-        frameIndex: 15
-        value: 0
   - trackName: Head
     keyframes:
     - frameIndex: 3
       value: 0
     - frameIndex: 20
       value: 0
+    - frameIndex: 3
+      value: 0
     rangeKeyframes: []
   - trackName: eyes
-    keyframes: []
+    keyframes:
+    - frameIndex: 87
+      value: 0
     rangeKeyframes: []
   - trackName: mouth
     keyframes:
-    - frameIndex: 100
-      value: 0
-    - frameIndex: 40
+    - frameIndex: 36
       value: 0
     rangeKeyframes: []
+  - trackName: leg
+    keyframes:
+    - frameIndex: 36
+      value: 0
+    rangeKeyframes:
+    - startKeyframe:
+        frameIndex: 5
+        value: 0
+      endKeyframe:
+        frameIndex: 20
+        value: 0

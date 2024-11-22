@@ -128,7 +128,6 @@ public partial class AnimationTrack : VisualElement
             key.AddToClassList("keyFrame");
             keys.Add(key);
             frames[floatKey.frameIndex].Add(key);
-            _trackData.keyframes.Add(floatKey);
         }
         
     }
@@ -192,15 +191,12 @@ public partial class AnimationTrack : VisualElement
 
     public void RemoveKey(int frame)
     {
-        for (int i = 0; i < keys.Count; i++)
+        AnimationKey key = frames[frame].Query<AnimationKey>();
+        if (key != null)
         {
-            if (keys[i].keyframeData.frameIndex == frame)
-            {
-                keys[i].RemoveFromHierarchy();
-                _trackData.keyframes.Remove(keys[i].keyframeData);
-                keys.RemoveAt(i);
-                break;
-            }
+            key.RemoveFromHierarchy();
+            _trackData.keyframes.Remove(key.keyframeData);
+            keys.Remove(key);
         }
     }
 
