@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -21,17 +22,14 @@ public partial class TimelineEditor : VisualElement
     [UxmlAttribute("isPlaying")]
     public bool isPlaying;
 
-    [UxmlAttribute("zoomValue")]
-    public float zoomValue = 20;
-
-    private VisualElement _frameMarkersWrapper;
-    private float _frameMarkerWidth = -1;
+    public VisualElement hoveredElement;
+    public AnimationTrack frameMarkersWrapper;
 
     private VisualElement _cursor;
     private VisualElement _animationTracksWrapper;
     private Label _currentFrameLabel;
 
-    private AnimationKey selectedKeyframe = new AnimationKey(-1, null, null);
+    private AnimationKey selectedKeyframe = new AnimationKey(-1, null);
 
     private float _frameRatio;
     private float _leftPadding;
@@ -46,9 +44,8 @@ public partial class TimelineEditor : VisualElement
 
         var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/_ProjectAssets/UI/USS/TimelineEditor.uss");
         styleSheets.Add(styleSheet);
-
-        _frameMarkersWrapper = this.Q<VisualElement>("frameMarkersWrapper");
-        _cursor = this.Q<VisualElement>("cursor");
+        
+        _cursor = this.Q<VisualElement>("cursorWrapper");
         _animationTracksWrapper = this.Q<VisualElement>("animationTracksWrapper");
         _currentFrameLabel = this.Q<Label>("currentFrameLabel");
 
@@ -58,14 +55,13 @@ public partial class TimelineEditor : VisualElement
 
     private void OnAttachedToPanel(AttachToPanelEvent evt)
     {
-        SetTimeMarkers();
+        ResetTracks();
 
         //SetButtons
         this.Q<Button>("playButton").clickable.clicked += () => Play();
         this.Q<Button>("pauseButton").clickable.clicked += () => Pause();
         this.Q<Button>("stopButton").clickable.clicked += () => Stop();
-
-        zoomValue = this.Q<Slider>("zoomSlider").value;
+        
         this.Q<Slider>("zoomSlider").RegisterValueChangedCallback(evt => { SetZoom(evt.newValue); });
 
         //SetValues
@@ -79,108 +75,75 @@ public partial class TimelineEditor : VisualElement
         this.Q<IntegerField>("maxFrame").value = maxFrame;
         this.Q<IntegerField>("maxFrame").RegisterValueChangedCallback(evt => { SetMaxFrame(evt.newValue); });
 
+        _animationTracksWrapper.Clear();
+        CreateFrameMarkers();
+        SetTestAnimationTracks();
+        SetValuesAfterFrame();
+    }
+
+    private async void SetValuesAfterFrame()
+    {
+        await Task.Delay(500);
+
+        SetZoom(5);
         SetCursor();
-        SetTestAnimatonTracks();
     }
 
     #endregion
 
-    private void SetTestAnimatonTracks()
+
+    #region Tracks
+
+    private void CreateFrameMarkers()
     {
-        _animationTracksWrapper.Clear();
+        var track = new AnimationTrack("Name", this, true);
+        _animationTracksWrapper.Add(track);
+        frameMarkersWrapper = track;
+    }
+
+    private void SetTestAnimationTracks()
+    {
         for (int i = 0; i < 10; i++)
         {
             var track = new AnimationTrack("Track " + i, this);
             _animationTracksWrapper.Add(track);
             track.AddKeyFrame(Random.Range(minFrame, maxFrame));
         }
-
-        SetAllKeyframesPosition();
     }
-    
-    private void SetTimeMarkers()
+
+    private void ResetTracks()
     {
-        _frameMarkersWrapper.Clear();
-
-        for (int i = minFrame; i < maxFrame / 10 + 1; i++)
-        {
-            var marker = new VisualElement();
-            marker.pickingMode = PickingMode.Ignore;
-
-            marker.AddToClassList("frameMarker");
-            marker.Add(new Label((i * 10).ToString()));
-
-            var verticalLine = new VisualElement();
-            verticalLine.pickingMode = PickingMode.Ignore;
-            verticalLine.AddToClassList("verticalLine");
-
-            marker.Add(verticalLine);
-            _frameMarkersWrapper.Add(marker);
-        }
-
-        _frameMarkersWrapper.style.width =
-            new Length(_frameMarkerWidth * (zoomValue / 200) * _frameMarkersWrapper.childCount, LengthUnit.Pixel);
-    }
-    
-    private void SetAllKeyframesPosition()
-    {
-        ReadFrameMarkers();
-        
         foreach (AnimationTrack track in _animationTracksWrapper.Children())
         {
-            foreach (AnimationKey key in track.GetKeyFrames())
-            {
-                key.key.style.left = new Length(
-                    ((key.frame - minFrame) * _frameRatio) + _leftPadding / 2 -
-                    key.key.style.width.value.value / 2,
-                    LengthUnit.Pixel);
-            }
+            track.ResetFrames(); 
         }
     }
-
-
-    public void NextFrame()
-    {
-        currentFrame++;
-        SetCursor();
-    }
-
+    #endregion
     private void SetCursor()
     {
-        if (currentFrame > maxFrame)
+        if (currentFrame > maxFrame || currentFrame < minFrame)
         {
             currentFrame = minFrame;
         }
-
-
-        ReadFrameMarkers();
-
-        _cursor.style.left = new Length(((currentFrame - minFrame) * _frameRatio) + _leftPadding / 2,
-            LengthUnit.Pixel);
         _currentFrameLabel.text = currentFrame.ToString();
+        
+        _cursor.style.left = frameMarkersWrapper[currentFrame-minFrame+1].resolvedStyle.left;
+        
     }
-    
+
     public void SetZoom(float value)
     {
-        if (_frameMarkerWidth == -1)
+        foreach (AnimationTrack track in _animationTracksWrapper.Children())
         {
-            _frameMarkerWidth = _frameMarkersWrapper.resolvedStyle.width;
+            track.SetFrameWidth(value);
         }
-
-        zoomValue = value;
-        if (_frameMarkersWrapper != null)
-        {
-            _frameMarkersWrapper.style.width = new Length(_frameMarkerWidth * (zoomValue / 200) * _frameMarkersWrapper.childCount,
-                LengthUnit.Pixel);
-        }
-
+        _cursor.style.width = value;
         SetCursor();
-        SetAllKeyframesPosition();
     }
 
     #region Keyframes
 
-    private void DeselectKeyframe()
+    public void DeselectKeyframe()
     {
         if (selectedKeyframe.frame != -1)
         {
@@ -193,7 +156,6 @@ public partial class TimelineEditor : VisualElement
     {
         DeselectKeyframe();
         selectedKeyframe = key;
-        
     }
 
     public void DeleteKeyframe()
@@ -233,59 +195,37 @@ public partial class TimelineEditor : VisualElement
     private void SetMinFrame(int frame)
     {
         minFrame = frame;
-        SetTimeMarkers();
+        ResetTracks();
     }
 
     private void SetMaxFrame(int frame)
     {
         maxFrame = frame;
-        SetTimeMarkers();
+        ResetTracks();
     }
 
     private void SetFPS(int fps)
     {
         FPS = fps;
     }
+    
+    public void NextFrame()
+    {
+        currentFrame++;
+        SetCursor();
+    }
 
+    public void SetCurrentFrame( int frame)
+    {
+        currentFrame = frame;
+        SetCursor();
+    }
     #endregion
-    
-    private void ReadFrameMarkers()
-    {
-        var firstKey = _frameMarkersWrapper[0];
-        var lastKey = _frameMarkersWrapper[_frameMarkersWrapper.childCount - 1];
 
-        int firstFrameNumber = int.Parse(firstKey.Q<Label>().text);
-        int lastFrameNumber = int.Parse(lastKey.Q<Label>().text);
-
-        float firstKeyPos = GetGlobalLeft(firstKey[1]);
-        float lastKeyPos = GetGlobalLeft(lastKey[1]);
-
-        int numberRatio = lastFrameNumber - firstFrameNumber;
-        float posRatio = lastKeyPos - firstKeyPos;
-        _frameRatio = posRatio / numberRatio;
-        _leftPadding = firstKeyPos;
-    }
-    
-    public int GetFrameFromPosition(float position)
-    {
-        ReadFrameMarkers();
-        return (int) ((position - _leftPadding) / _frameRatio) + minFrame;
-    }
-    
-    private float GetGlobalLeft(VisualElement element)
-    {
-        float left = element.resolvedStyle.left;
-        if (element.parent != null && element.parent != this)
-        {
-            left += GetGlobalLeft(element.parent);
-        }
-
-        return left;
-    }
-    
     private void SetIsPlaying(bool playing)
     {
         isPlaying = playing;
     }
+    
     
 }

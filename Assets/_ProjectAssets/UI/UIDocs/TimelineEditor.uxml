@@ -1,5 +1,5 @@
 <engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/_ProjectAssets/UI/USS/TimelineEditor.uss?fileID=7433441132597879392&amp;guid=111ec3d398cf9e54ba630311d7464a87&amp;type=3#TimelineEditor" />
+    <Style src="project://database/Assets/_ProjectAssets/UI/USS/TimeLineEditor.uss?fileID=7433441132597879392&amp;guid=111ec3d398cf9e54ba630311d7464a87&amp;type=3#TimeLineEditor" />
     <engine:VisualElement name="wrapper" class="fullSize">
         <engine:VisualElement name="topBar">
             <engine:VisualElement name="frameUtilsWrapper" class="topBarWrapper">
@@ -28,37 +28,17 @@
                 </engine:Button>
             </engine:VisualElement>
             <engine:VisualElement name="zoomWrapper" class="topBarWrapper">
-                <engine:Slider high-value="100" name="zoomSlider" low-value="20" value="60" style="width: 50%;" />
+                <engine:Slider high-value="10" name="zoomSlider" low-value="3" value="5" style="width: 50%;" />
             </engine:VisualElement>
         </engine:VisualElement>
         <engine:ScrollView name="mainContainer" mode="Horizontal" focusable="false" touch-scroll-type="Clamped" horizontal-scroller-visibility="Hidden">
-            <engine:VisualElement name="animationTracksWrapper" class="overlay">
+            <engine:VisualElement name="animationTracksWrapper">
                 <AnimationTrack trackName="rth" />
                 <AnimationTrack trackName="nome" />
             </engine:VisualElement>
-            <engine:VisualElement name="frameMarkersWrapper" data-source-type="TimelineEditor, Assembly-CSharp" picking-mode="Ignore" style="width: 627px;">
-                <engine:VisualElement enabled="true" class="frameMarker" style="flex-grow: 1;">
-                    <engine:Label text="10" />
-                    <engine:VisualElement class="verticalLine" style="flex-grow: 1;" />
-                </engine:VisualElement>
-                <engine:VisualElement class="frameMarker" style="flex-grow: 1;">
-                    <engine:Label text="10" />
-                    <engine:VisualElement class="verticalLine" style="flex-grow: 1;" />
-                </engine:VisualElement>
-                <engine:VisualElement class="frameMarker" style="flex-grow: 1;">
-                    <engine:Label text="10" />
-                    <engine:VisualElement class="verticalLine" style="flex-grow: 1;" />
-                </engine:VisualElement>
-                <engine:VisualElement class="frameMarker" style="flex-grow: 1;">
-                    <engine:Label text="10" />
-                    <engine:VisualElement class="verticalLine" style="flex-grow: 1;" />
-                </engine:VisualElement>
-                <engine:VisualElement class="frameMarker" style="flex-grow: 1;">
-                    <engine:Label text="10" />
-                    <engine:VisualElement class="verticalLine" style="flex-grow: 1;" />
-                </engine:VisualElement>
+            <engine:VisualElement name="cursorWrapper" class="overlay" style="flex-grow: 1;">
+                <engine:VisualElement name="cursor" />
             </engine:VisualElement>
-            <engine:VisualElement name="cursor" class="overlay" />
         </engine:ScrollView>
         <engine:Label text="0" name="currentFrameLabel" class="mediumText" style="position: absolute; bottom: 0; left: 0;" />
     </engine:VisualElement>
