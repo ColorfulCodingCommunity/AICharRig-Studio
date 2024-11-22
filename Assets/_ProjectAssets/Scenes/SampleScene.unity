@@ -506,6 +506,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a7e1fc74d5024245bb6afc6fe6879e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  trackData: {fileID: 11400000, guid: 534d873c02f9d424f8615ae36fd46897, type: 2}
 --- !u!95 &1816251725
 Animator:
   serializedVersion: 7

@@ -77,7 +77,6 @@ public partial class TimelineEditor : VisualElement
 
         _animationTracksWrapper.Clear();
         CreateFrameMarkers();
-        SetTestAnimationTracks();
         SetValuesAfterFrame();
     }
 
@@ -96,21 +95,32 @@ public partial class TimelineEditor : VisualElement
 
     private void CreateFrameMarkers()
     {
-        var track = new AnimationTrack("Name", this, true);
+        FloatTrackData trackData = new FloatTrackData();
+        trackData.trackName = "Name";
+        var track = new AnimationTrack(trackData, this, true);
         track.name = "frameMarkersWrapper";
         _animationTracksWrapper.Add(track);
         frameMarkersWrapper = track;
     }
 
-    private void SetTestAnimationTracks()
+    public void AddTrack(FloatTrackData trackData)
     {
-        for (int i = 0; i < 10; i++)
+        var track = new AnimationTrack(trackData, this);
+        _animationTracksWrapper.Add(track);
+    }
+    
+    public void RemoveTrack(FloatTrackData trackData)
+    {
+        foreach (AnimationTrack track in _animationTracksWrapper.Children())
         {
-            var track = new AnimationTrack("Track " + i, this);
-            _animationTracksWrapper.Add(track);
-            track.AddKeyFrame(Random.Range(minFrame, maxFrame));
+            if (track.trackName == trackData.trackName)
+            {
+                _animationTracksWrapper.Remove(track);
+                break;
+            }
         }
     }
+    
 
     private void ResetTracks()
     {
@@ -168,6 +178,18 @@ public partial class TimelineEditor : VisualElement
         }
     }
 
+    public void AddKeyframe(FloatTrackData floatTrackData, KeyframeData<float> keyframeData)
+    {
+        foreach (AnimationTrack track in _animationTracksWrapper.Children())
+        {
+            if (track.trackName == floatTrackData.trackName)
+            {
+                track.AddKeyFrame(keyframeData.frameIndex);
+                floatTrackData.keyframes.Add(keyframeData);
+                break;
+            }
+        }
+    }
     #endregion
 
     #region PlayerControls

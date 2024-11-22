@@ -2,12 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
 public class TimelineManager : MonoBehaviour
 {
+    public TrackData trackData;
+    
     private TimelineEditor _timeLineEditor;
     private float _timeSinceLastFrame;
     private UIActions _uiActions;
@@ -21,6 +24,14 @@ public class TimelineManager : MonoBehaviour
         _uiActions = new UIActions();
         _uiActions.Enable();
         _uiActions.Player.Delete.performed += Delete;
+        if (trackData != null)
+        {
+            foreach (FloatTrackData track in trackData.floatTracks)
+            {
+                AddTrack(track);
+            }
+        }
+        
     }
 
     private void Update()
@@ -61,48 +72,20 @@ public class TimelineManager : MonoBehaviour
         }
     }
     
-    private VisualElement GetHoveredFrame()
-    {
-        Vector2 mousePosition = Mouse.current.position.ReadValue();
-        mousePosition.y = Screen.height - mousePosition.y;
-
-        List<VisualElement> picked = new List<VisualElement>();
-        // Get all elements at the mouse position
-        GetComponent<UIDocument>().rootVisualElement.panel.PickAll(mousePosition, picked);
-        foreach (var elem in picked)
-        {
-            if (elem.ClassListContains("frame"))
-            {
-                Debug.Log($"Hovered frame: {elem.name}, WorldBound: {elem.worldBound}");
-                return elem;
-            }
-        }
-
-        Debug.Log("No frame hovered.");
-        return null;
-    }
-
-
-    //TODO:
     public void AddTrack(FloatTrackData floatTrackData)
     {
-        throw new NotImplementedException();
+        _timeLineEditor.AddTrack(floatTrackData);
     }
 
     public void RemoveTrack(FloatTrackData floatTrackData)
     {
-        throw new NotImplementedException();
+        _timeLineEditor.RemoveTrack(floatTrackData);
     }
 
     public void AddKeyframe(FloatTrackData floatTrackData, KeyframeData<float> keyframe)
     {
-        throw new NotImplementedException();
+        _timeLineEditor.AddKeyframe(floatTrackData, keyframe);
     }
-
-    //public void MoveKeyframe(...)
-    //{
-    //    throw new NotImplementedException();
-    //}
 
     private void Delete(InputAction.CallbackContext obj)
     {

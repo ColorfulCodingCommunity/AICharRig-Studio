@@ -13,9 +13,9 @@ public partial class AnimationTrack : VisualElement
     private Dictionary<int, VisualElement> frames = new Dictionary<int, VisualElement>();
     private bool _isMarker = false;
 
-    public AnimationTrack(string trackName, TimelineEditor editor, bool isMarker = false)
+    public AnimationTrack(FloatTrackData trackData, TimelineEditor editor, bool isMarker = false)
     {
-        this.trackName = trackName;
+        this.trackName = trackData.trackName;
         _editor = editor;
         this.AddToClassList("animationTrack");
         this.AddToClassList("smallText");
@@ -26,6 +26,14 @@ public partial class AnimationTrack : VisualElement
         {
             _isMarker = true;
             SetFrameMarkers();
+        }
+        else
+        {
+            foreach (var keyframe in trackData.keyframes)
+            {
+                AddKeyFrame(keyframe.frameIndex);
+            }
+            
         }
     }
 
