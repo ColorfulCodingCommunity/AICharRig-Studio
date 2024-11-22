@@ -7,4 +7,5 @@ public class FloatTrackData
 {
     public string trackName;
     public List<KeyframeData<float>> keyframes;
+    public List<RangeTrackData> rangeKeyframes;
 }

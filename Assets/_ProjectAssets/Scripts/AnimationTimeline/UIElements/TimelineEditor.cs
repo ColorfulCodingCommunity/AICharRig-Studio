@@ -29,7 +29,7 @@ public partial class TimelineEditor : VisualElement
     private VisualElement _animationTracksWrapper;
     private Label _currentFrameLabel;
 
-    private AnimationKey selectedKeyframe = new AnimationKey(-1, null);
+    private AnimationKey selectedKeyframe = null;
 
     private float _frameRatio;
     private float _leftPadding;
@@ -102,7 +102,8 @@ public partial class TimelineEditor : VisualElement
         _animationTracksWrapper.Add(track);
         frameMarkersWrapper = track;
     }
-
+    
+    
     public void AddTrack(FloatTrackData trackData)
     {
         var track = new AnimationTrack(trackData, this);
@@ -113,7 +114,7 @@ public partial class TimelineEditor : VisualElement
     {
         foreach (AnimationTrack track in _animationTracksWrapper.Children())
         {
-            if (track.trackName == trackData.trackName)
+            if (track.IsSameTrack(trackData))
             {
                 _animationTracksWrapper.Remove(track);
                 break;
@@ -156,7 +157,7 @@ public partial class TimelineEditor : VisualElement
 
     public void DeselectKeyframe()
     {
-        if (selectedKeyframe.frame != -1)
+        if (selectedKeyframe != null)
         {
             selectedKeyframe.Deselect();
         }
@@ -171,10 +172,10 @@ public partial class TimelineEditor : VisualElement
 
     public void DeleteKeyframe()
     {
-        if (selectedKeyframe.frame != -1)
+        if (selectedKeyframe != null)
         {
             selectedKeyframe.Delete();
-            selectedKeyframe.frame = -1;
+            selectedKeyframe= null;
         }
     }
 
@@ -182,9 +183,9 @@ public partial class TimelineEditor : VisualElement
     {
         foreach (AnimationTrack track in _animationTracksWrapper.Children())
         {
-            if (track.trackName == floatTrackData.trackName)
+            if (track.IsSameTrack(floatTrackData))
             {
-                track.AddKeyFrame(keyframeData.frameIndex);
+                track.AddKeyFrame(keyframeData);
                 floatTrackData.keyframes.Add(keyframeData);
                 break;
             }

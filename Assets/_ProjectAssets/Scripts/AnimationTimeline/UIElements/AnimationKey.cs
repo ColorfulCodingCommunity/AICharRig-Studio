@@ -3,18 +3,14 @@ using UnityEngine.UIElements;
 
 public class AnimationKey : VisualElement
 {
-    public int frame;
     public AnimationTrack track;
+    public KeyframeData<float> keyframeData;
 
-    public AnimationKey(int frame, AnimationTrack track)
+    public AnimationKey(KeyframeData<float> data, AnimationTrack track)
     {
-        if (frame <0)
-        {
-            return;
-        }
-        this.frame = frame;
         this.track = track;
         this.focusable = false;
+        keyframeData = data;
     }
 
     public void Select()
@@ -30,6 +26,6 @@ public class AnimationKey : VisualElement
     
     public void Delete()
     {
-        track.RemoveKey(frame);
+        track.RemoveKey(keyframeData.frameIndex);
     }
 }

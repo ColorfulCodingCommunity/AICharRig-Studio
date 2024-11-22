@@ -86,7 +86,7 @@ public class TimelineManager : MonoBehaviour
     {
         _timeLineEditor.AddKeyframe(floatTrackData, keyframe);
     }
-
+    
     private void Delete(InputAction.CallbackContext obj)
     {
         _timeLineEditor.DeleteKeyframe();
