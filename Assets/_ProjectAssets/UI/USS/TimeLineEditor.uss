@@ -93,7 +93,7 @@
 
 #frameMarkersWrapper {
     width: 100%;
-    height: 80%;
+    height: 7%;
     flex-direction: row;
     justify-content: space-between;
 }
@@ -125,7 +125,7 @@
 }
 
 #animationTracksWrapper {
-    padding-top: 24px;
+    padding-top: -2px;
 }
 
 #zoomWrapper {

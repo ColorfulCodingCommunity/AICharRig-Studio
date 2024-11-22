@@ -97,6 +97,7 @@ public partial class TimelineEditor : VisualElement
     private void CreateFrameMarkers()
     {
         var track = new AnimationTrack("Name", this, true);
+        track.name = "frameMarkersWrapper";
         _animationTracksWrapper.Add(track);
         frameMarkersWrapper = track;
     }
