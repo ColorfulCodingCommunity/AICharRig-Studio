@@ -1,0 +1,61 @@
+:root {
+    --bg-dark-color: rgb(53, 53, 53);
+    --bg-light-color: rgb(91, 91, 91);
+    --black-color: rgb(10, 10, 10);
+    --white-color: rgb(217, 217, 217);
+    --red-color: rgb(255, 15, 100);
+    --yellow-key-color: rgb(255, 255, 0);
+    --selected-key-color: rgb(255, 130, 0);
+    --font-small: 9px;
+    --font-mid: 12px;
+}
+
+#ControlsWrapper{
+	font-size: var(--font-small);
+}
+
+EnumField{
+    font-size: var(--font-mid);
+}
+EnumField .unity-base-field__label{
+    display:none;
+}
+
+.panel{
+    padding: 20px;
+    border-radius: 20px;
+    background-color: var(--bg-light-color);
+}
+
+.keyable-slider{
+    color: white;
+}
+
+.keyable-slider .unity-base-field:focus:enabled > .unity-base-field__label{
+    color:white;
+}
+
+.keyable-slider .unity-slider__label{
+    width: 20%;
+    min-width: 75px;
+}
+
+.keyable-slider .unity-slider__input{
+    width: 40%;
+}
+
+.action-button{
+    color: white;
+    background-color: transparent;
+    border-width: 1px;
+    border-radius: 5px;
+}
+
+.action-button #Icon{
+    background-color: #B32626;
+    border-radius: 50%;
+}
+
+.action-button:hover{
+    background-color: var(--bg-dark-color);
+}

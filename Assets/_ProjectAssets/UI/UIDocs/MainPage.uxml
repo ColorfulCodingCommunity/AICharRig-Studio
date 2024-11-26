@@ -1,6 +1,54 @@
 <engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <engine:VisualElement name="Wrapper" style="flex-grow: 1; flex-direction: row;">
-        <TimelineEditor name="TimelineEditor" style="width: 675px; height: 403px;" />
-        <engine:VisualElement name="ControlsWrapper" style="flex-grow: 1;" />
+    <Style src="project://database/Assets/_ProjectAssets/UI/USS/MainPage.uss?fileID=7433441132597879392&amp;guid=cd83c44992671e34ab21cbd474bf7774&amp;type=3#MainPage" />
+    <engine:VisualElement name="Wrapper" style="flex-grow: 1; flex-direction: column;">
+        <engine:VisualElement name="Top" style="flex-grow: 1; height: 20px;">
+            <engine:EnumField label="Enum" value="Center" type="ScreenModeEnum, Assembly-CSharp" style="width: 200px;" />
+        </engine:VisualElement>
+        <engine:VisualElement name="Body" style="flex-grow: 1; flex-direction: row;">
+            <engine:VisualElement name="Center" style="flex-grow: 1; padding-top: 10px; padding-right: 20px; padding-bottom: 10px; padding-left: 20px;">
+                <engine:VisualElement name="VideoPreview" style="flex-grow: 1; align-items: center; justify-content: center; flex-direction: row;">
+                    <engine:VisualElement name="DrivingVideo" style="width: 200px; height: 200px; background-color: rgb(53, 53, 53); margin-top: 20px; margin-right: 20px; margin-bottom: 20px; margin-left: 20px; align-items: center; justify-content: center; background-image: url(&quot;project://database/Assets/_ProjectAssets/RenderTexture/FaceExpression.renderTexture?fileID=8400000&amp;guid=6610ef1c8efb02f43936f316659eff4f&amp;type=2#FaceExpression&quot;);" />
+                    <engine:VisualElement name="SourceAsset" style="width: 300px; height: 300px; background-color: rgba(255, 255, 255, 0.54); align-items: center; justify-content: center;">
+                        <engine:VisualElement name="UploadBut" style="width: 150px; height: 150px; align-items: center;">
+                            <engine:VisualElement name="UploadIcon" style="background-image: url(&quot;project://database/Assets/_ProjectAssets/UI/Icons/upload.png?fileID=2800000&amp;guid=2af67d4d87e482741aaad93fc4de64a1&amp;type=3#upload&quot;); width: 100px; height: 100px;" />
+                            <engine:Label text="Upload Source Asset" />
+                        </engine:VisualElement>
+                        <engine:Button text="X" name="CloseBut" class="action-button" style="position: absolute; left: 10px; top: 10px; border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255);" />
+                    </engine:VisualElement>
+                </engine:VisualElement>
+                <TimelineEditor name="TimelineEditor" style="width: 700px; height: 250px;" />
+            </engine:VisualElement>
+            <engine:VisualElement name="ControlsWrapper" style="flex-grow: 1; padding-left: 10px; padding-right: 10px; padding-top: 20px; width: 350px; justify-content: flex-start;">
+                <engine:VisualElement name="Sliders" class="panel" style="width: 250px;">
+                    <KeyableSlider label="Left Brow" name="LeftBrowSlider" />
+                    <KeyableSlider label="Right Brow" name="RightBrowSlider" />
+                    <engine:VisualElement name="Spacer" style="height: 20px;" />
+                    <KeyableSlider label="Smile/Sad Left" name="SmileSadLeftSlider" />
+                    <KeyableSlider label="Smile/Sad Right" name="SmileSadRightSlider" />
+                    <engine:VisualElement name="Spacer" style="height: 20px;" />
+                    <KeyableSlider label="Mouth Open" name="MouthOpenSlider" startValue="0" />
+                    <KeyableSlider label="Mouth Puff" name="MouthPuffSlider" startValue="0" />
+                    <engine:VisualElement name="Spacer" style="height: 20px;" />
+                    <KeyableSlider label="Eyes Direction" name="EyesDirectionSlider" />
+                    <KeyableSlider label="Eyes Blink" name="EyesBlinkSlider" startValue="0" />
+                    <engine:VisualElement name="Spacer" style="height: 20px;" />
+                    <KeyableSlider label="Head Yaw" name="HeadYawSlider" />
+                    <KeyableSlider label="Head Roll" name="HeadRollSlider" />
+                    <KeyableSlider label="Head Pitch" name="HeadPitchSlider" />
+                    <engine:Button name="ResetSlidersBtn" class="action-button" style="flex-direction: row; height: 30px; align-items: center; width: 70px; justify-content: center; margin-left: 140px;">
+                        <engine:Label text="Reset" style="margin-left: 4px; padding-left: 2px; width: 100%;" />
+                    </engine:Button>
+                </engine:VisualElement>
+                <engine:VisualElement name="BackEndControls" class="panel" style="width: 250px; margin-top: 25px;">
+                    <engine:Button name="SendBasePoseBtn" class="action-button" style="flex-direction: row; height: 30px; align-items: center; width: auto; justify-content: flex-start;">
+                        <engine:Label text="Send Base Pose" style="margin-left: 10px;" />
+                    </engine:Button>
+                    <engine:Button name="ConnectBtn" class="action-button" style="flex-direction: row; height: 30px; align-items: center; width: auto;">
+                        <engine:VisualElement name="Icon" style="width: 10px; height: 10px;" />
+                        <engine:Label text="Connect to AI Server" style="margin-left: 10px;" />
+                    </engine:Button>
+                </engine:VisualElement>
+            </engine:VisualElement>
+        </engine:VisualElement>
     </engine:VisualElement>
 </engine:UXML>

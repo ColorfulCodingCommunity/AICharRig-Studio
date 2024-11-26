@@ -1,17 +1,21 @@
+using Cysharp.Threading.Tasks;
+using System;
 using System.Threading.Tasks;
+using TMPro.EditorUtilities;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
 [UxmlElement("TimelineEditor")]
 public partial class TimelineEditor : VisualElement
 {
+    public event Action<AnimationTrack> OnTrackTryDelete;
+    public event Action<int> OnCursorMoved;
+
     [UxmlAttribute("currentFrame")]
     public int currentFrame = 0;
-
-    [UxmlAttribute("minFrame")]
-    public int minFrame = 0;
 
     [UxmlAttribute("maxFrame")]
     public int maxFrame = 100;
@@ -19,20 +23,23 @@ public partial class TimelineEditor : VisualElement
     [UxmlAttribute("FPS")]
     public int FPS = 24;
 
-    [UxmlAttribute("isPlaying")]
     public bool isPlaying;
 
-    public VisualElement hoveredElement;
     public AnimationTrack frameMarkersWrapper;
+
+    private CursorControls _cursorControls;
 
     private VisualElement _cursor;
     private VisualElement _animationTracksWrapper;
     private Label _currentFrameLabel;
-
     private AnimationKey selectedKeyframe = null;
 
+    private float _currentZoom = 5f;
     private float _frameRatio;
     private float _leftPadding;
+
+    private bool _isDraggingKey;
+    private bool _isDraggingCursor;
 
     #region VisualElement
 
@@ -50,101 +57,105 @@ public partial class TimelineEditor : VisualElement
         _currentFrameLabel = this.Q<Label>("currentFrameLabel");
 
         RegisterCallback<AttachToPanelEvent>(OnAttachedToPanel);
-    }
 
+        _cursorControls = new CursorControls();
+        _cursorControls.Init(this);
+    }
 
     private void OnAttachedToPanel(AttachToPanelEvent evt)
     {
+        _cursorControls.OnAttachPanel();
+
         ResetTracks();
 
-        //SetButtons
-        this.Q<Button>("playButton").clickable.clicked += () => Play();
-        this.Q<Button>("pauseButton").clickable.clicked += () => Pause();
-        this.Q<Button>("stopButton").clickable.clicked += () => Stop();
-        
-        this.Q<Slider>("zoomSlider").RegisterValueChangedCallback(evt => { SetZoom(evt.newValue); });
-
-        //SetValues
-        this.Q<IntegerField>("fpsValue").value = FPS;
-        this.Q<IntegerField>("fpsValue").RegisterValueChangedCallback(evt => { SetFPS(evt.newValue); });
-
-        var minFrameField = this.Q<IntegerField>("minFrame");
-        minFrameField.value = minFrame;
-        minFrameField.RegisterValueChangedCallback(evt => { SetMinFrame(evt.newValue); });
-
-        this.Q<IntegerField>("maxFrame").value = maxFrame;
-        this.Q<IntegerField>("maxFrame").RegisterValueChangedCallback(evt => { SetMaxFrame(evt.newValue); });
+        RegisterCallback<MouseOverEvent>(OnMouseOver, TrickleDown.TrickleDown);
 
         _animationTracksWrapper.Clear();
+
         CreateFrameMarkers();
-        SetValuesAfterFrame();
+        SetDefaultValuesAsync();
     }
 
-    private async void SetValuesAfterFrame()
+    private void OnMouseOver(MouseOverEvent evt)
+    {
+        //Drag keyframe logic
+        if (_isDraggingKey && selectedKeyframe != null)
+        {
+            var mousePosX = evt.localMousePosition.x;
+
+            VisualElement frame = GetFrame(mousePosX, out int idx);
+            selectedKeyframe.track.MoveKeyFrame(selectedKeyframe, idx - 2);
+        }
+    }
+
+    public void OnMouseReleased()
+    {
+        _isDraggingKey = false;
+        _isDraggingCursor = false;
+    }
+
+    private async void SetDefaultValuesAsync()
     {
         await Task.Delay(500);
 
-        SetZoom(5);
+        SetZoom(_currentZoom);
         SetCursor();
     }
-
     #endregion
 
+    #region PUBLIC_METHODS
 
-    #region Tracks
+    public async void AddTrack(FloatTrackData trackData)
+    {
+        var track = new AnimationTrack(trackData.trackName, this);
+        _animationTracksWrapper.Add(track);
 
-    private void CreateFrameMarkers()
-    {
-        FloatTrackData trackData = new FloatTrackData();
-        trackData.trackName = "Name";
-        var track = new AnimationTrack(trackData, this, true);
-        track.name = "frameMarkersWrapper";
-        _animationTracksWrapper.Add(track);
-        frameMarkersWrapper = track;
+        track.OnTrackDeleteButtonPressed += (track) => OnTrackTryDelete?.Invoke(track);
+        track.OnKeyClicked += SelectKeyframe;
+        track.OnKeyDragStart += StartKeyDrag;
+
+        ResetTracks();
+
+        await UniTask.WaitForEndOfFrame();
+        SetZoom(_currentZoom);
     }
-    
-    
-    public void AddTrack(FloatTrackData trackData)
-    {
-        var track = new AnimationTrack(trackData, this);
-        _animationTracksWrapper.Add(track);
-    }
-    
-    public void RemoveTrack(FloatTrackData trackData)
+
+    public void AddKeyToTrack(string trackName, KeyframeData<float> key)
     {
         foreach (AnimationTrack track in _animationTracksWrapper.Children())
         {
-            if (track.IsSameTrack(trackData))
+            if (track.trackName == trackName)
             {
-                _animationTracksWrapper.Remove(track);
+                track.AddKeyFrame(key);
                 break;
             }
         }
     }
-    
 
-    private void ResetTracks()
+    public void SetCursorToNextFrame()
     {
-        foreach (AnimationTrack track in _animationTracksWrapper.Children())
-        {
-            track.ResetFrames(); 
-        }
+        currentFrame++;
+        SetCursor();
     }
-    #endregion
-    private void SetCursor()
+
+    public void SetCursor()
     {
-        if (currentFrame > maxFrame || currentFrame < minFrame)
+        if (currentFrame > maxFrame)
         {
-            currentFrame = minFrame;
+            currentFrame = 0;
         }
+
         _currentFrameLabel.text = currentFrame.ToString();
-        
-        _cursor.style.left = frameMarkersWrapper[currentFrame-minFrame+1].resolvedStyle.left;
-        
+        _cursor.style.left = frameMarkersWrapper[currentFrame + 1].resolvedStyle.left;
+
+        OnCursorMoved?.Invoke(currentFrame);
     }
 
     public void SetZoom(float value)
     {
+        currentFrame = 0;
+
+        _currentZoom = value;
         foreach (AnimationTrack track in _animationTracksWrapper.Children())
         {
             track.SetFrameWidth(value);
@@ -152,10 +163,63 @@ public partial class TimelineEditor : VisualElement
         _cursor.style.width = value;
         SetCursor();
     }
+    public void ResetTracks()
+    {
+        foreach (AnimationTrack track in _animationTracksWrapper.Children())
+        {
+            track.ResetFrames();
+        }
+    }
 
-    #region Keyframes
+    #endregion
 
-    public void DeselectKeyframe()
+    #region TRACKS_PRIVATE_METHODS
+
+    private void CreateFrameMarkers()
+    {
+        frameMarkersWrapper = new AnimationTrack("", this, true);
+        frameMarkersWrapper.name = "frameMarkersWrapper";
+        _animationTracksWrapper.Add(frameMarkersWrapper);
+
+        frameMarkersWrapper.RegisterCallback<MouseDownEvent>(StartDraggingCursor);
+        frameMarkersWrapper.RegisterCallback<MouseOverEvent>(OnCursorDrag);
+    }
+
+    private void StartDraggingCursor(MouseDownEvent evt)
+    {
+        isPlaying = false;
+        _isDraggingCursor = true;
+
+        SetCursorToPosition(evt.localMousePosition.x);
+    }
+
+    private void OnCursorDrag(MouseOverEvent evt)
+    {
+        if(!_isDraggingCursor) return;
+
+        SetCursorToPosition(evt.localMousePosition.x);
+    }
+
+    private void SetCursorToPosition(float x)
+    {
+        GetFrame(x, out int idx);
+
+        currentFrame = Mathf.Max(0, idx - 1);
+        SetCursor();
+    }
+
+    #endregion
+
+    #region KEYFRAMES
+
+    public void SelectKeyframe(AnimationKey key)
+    {
+        DeselectCurrentKeyframe();
+        selectedKeyframe = key;
+        selectedKeyframe.Select();
+    }
+
+    public void DeselectCurrentKeyframe()
     {
         if (selectedKeyframe != null)
         {
@@ -163,93 +227,56 @@ public partial class TimelineEditor : VisualElement
         }
     }
 
-
-    public void SelectKeyframe(AnimationKey key)
-    {
-        DeselectKeyframe();
-        selectedKeyframe = key;
-    }
-
-    public void DeleteKeyframe()
+    public AnimationKey DeleteKeyframe()
     {
         if (selectedKeyframe != null)
         {
             selectedKeyframe.Delete();
-            selectedKeyframe= null;
+
+            var removedKey = selectedKeyframe;
+            selectedKeyframe = null;
+            return removedKey;
         }
+
+        return null;
     }
 
-    public void AddKeyframe(FloatTrackData floatTrackData, KeyframeData<float> keyframeData)
+    private void StartKeyDrag(AnimationKey key)
     {
-        foreach (AnimationTrack track in _animationTracksWrapper.Children())
+        _isDraggingKey = true;
+    }
+
+    //public void AddKeyframe(FloatTrackData floatTrackData, KeyframeData<float> keyframeData)
+    //{
+    //    foreach (AnimationTrack track in _animationTracksWrapper.Children())
+    //    {
+    //        if (track.IsSameTrack(floatTrackData))
+    //        {
+    //            track.AddKeyFrame(keyframeData);
+    //            floatTrackData.keyframes.Add(keyframeData);
+    //            break;
+    //        }
+    //    }
+    //}
+    #endregion
+
+    #region UTILS
+    private VisualElement GetFrame(float localX, out int idx)
+    {
+        idx = 0;
+        foreach (var frameMarker in frameMarkersWrapper.Children())
         {
-            if (track.IsSameTrack(floatTrackData))
+            if (frameMarker.localBound.x < localX && frameMarker.localBound.x + frameMarker.localBound.width > localX)
             {
-                track.AddKeyFrame(keyframeData);
-                floatTrackData.keyframes.Add(keyframeData);
-                break;
+                return frameMarker;
             }
+            idx++;
         }
-    }
-    #endregion
 
-    #region PlayerControls
-
-    private void Play()
-    {
-        SetIsPlaying(true);
-    }
-
-    private void Pause()
-    {
-        SetIsPlaying(false);
-    }
-
-    public void Stop()
-    {
-        isPlaying = false;
-        currentFrame = minFrame;
-        SetCursor();
+        idx = 0;
+        return frameMarkersWrapper[0];
     }
 
     #endregion
 
-    #region FrameControls
-
-    private void SetMinFrame(int frame)
-    {
-        minFrame = frame;
-        ResetTracks();
-    }
-
-    private void SetMaxFrame(int frame)
-    {
-        maxFrame = frame;
-        ResetTracks();
-    }
-
-    private void SetFPS(int fps)
-    {
-        FPS = fps;
-    }
-    
-    public void NextFrame()
-    {
-        currentFrame++;
-        SetCursor();
-    }
-
-    public void SetCurrentFrame( int frame)
-    {
-        currentFrame = frame;
-        SetCursor();
-    }
-    #endregion
-
-    private void SetIsPlaying(bool playing)
-    {
-        isPlaying = playing;
-    }
-    
-    
 }

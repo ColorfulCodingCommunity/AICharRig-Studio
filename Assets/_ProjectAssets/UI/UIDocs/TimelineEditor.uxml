@@ -3,16 +3,12 @@
     <engine:VisualElement name="wrapper" class="fullSize">
         <engine:VisualElement name="topBar">
             <engine:VisualElement name="frameUtilsWrapper" class="topBarWrapper">
-                <engine:VisualElement name="VisualElement" class="integerField greyText bold midText" style="flex-direction: row;">
-                    <engine:Label text="FPS" />
+                <engine:VisualElement name="VisualElement" class="integerField greyText bold midText" style="flex-direction: row; display: none;">
+                    <engine:Label text="FPS:" />
                     <engine:IntegerField value="10" name="fpsValue" max-length="2" />
                 </engine:VisualElement>
                 <engine:VisualElement name="VisualElement" class="integerField greyText bold midText" style="flex-direction: row; font-size: 11px;">
-                    <engine:Label text="Min" />
-                    <engine:IntegerField value="42" name="minFrame" max-length="4" />
-                </engine:VisualElement>
-                <engine:VisualElement name="VisualElement" class="integerField greyText bold midText" style="flex-direction: row; font-size: 11px;">
-                    <engine:Label text="Max&#10;" />
+                    <engine:Label text="Total Frames:" />
                     <engine:IntegerField value="42" name="maxFrame" max-length="4" />
                 </engine:VisualElement>
             </engine:VisualElement>
@@ -33,11 +29,16 @@
         </engine:VisualElement>
         <engine:ScrollView name="mainContainer" mode="Horizontal" focusable="false" touch-scroll-type="Clamped" horizontal-scroller-visibility="Hidden">
             <engine:VisualElement name="animationTracksWrapper">
-                <AnimationTrack trackName="rth" />
+                <AnimationTrack trackName="rth">
+                    <engine:VisualElement class="trackName" style="flex-grow: 1; height: 10px;">
+                        <engine:Label text="Label" />
+                        <engine:Button text="x" />
+                    </engine:VisualElement>
+                </AnimationTrack>
                 <AnimationTrack trackName="nome" />
             </engine:VisualElement>
-            <engine:VisualElement name="cursorWrapper" class="overlay" style="flex-grow: 1;">
-                <engine:VisualElement name="cursor" />
+            <engine:VisualElement name="cursorWrapper" picking-mode="Ignore" class="overlay" style="height: 100%;">
+                <engine:VisualElement name="cursor" picking-mode="Ignore" />
             </engine:VisualElement>
         </engine:ScrollView>
         <engine:Label text="0" name="currentFrameLabel" class="mediumText" style="position: absolute; bottom: 0; left: 0;" />

@@ -181,6 +181,19 @@
     position: absolute;
 }
 
+.keyFrame.big{
+    width: 9px;
+	height: 9px;
+}
+
+.keyFrame.empty{
+    background-color: var(--bg-light-color);
+}
+
+.keyFrame.key-exists{
+    background-color: var(--selected-key-color);
+}
+
 .selectedKeyFrame {
     background-color: var(--selected-key-color);
 }
@@ -190,14 +203,35 @@
     width: 4px;
     justify-content: center;
     align-items: center;
+
+    border-right-width: 1px;
+    border-color: var(--bg-light-color);
+}
+
+#frameMarkersWrapper .frame{
+    border-right-width: 0;
+
 }
 
 .trackName {
-    height: 100%;
-    width: 50px;
+    height: 10px;
+    width: 100px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
 }
+.trackName Label{
+    padding: 0;
+    margin: 2px;
+    padding: 0px;
+}
+.trackName Button{
+    background-color: transparent;    
+    border-width: 0px;
+    width: 10px;
 
-.curosrWrapper {
+    margin: 2px;
+    padding: 0px;
 }
 
 #cursorWrapper {

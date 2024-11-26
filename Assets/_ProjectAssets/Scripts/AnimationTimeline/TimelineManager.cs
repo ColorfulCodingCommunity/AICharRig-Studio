@@ -3,39 +3,55 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using Unity.VisualScripting;
+using UnityEditor.Timeline;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
 public class TimelineManager : MonoBehaviour
 {
-    public TrackData trackData;
-    
+    public event Action<int, TimelineData> OnCursorMovedEvt;
+    public event Action<string> OnTrackDeleted;
+
+    public InputAction deleteAction;
+
+    private TimelineData _timelineData;
     private TimelineEditor _timeLineEditor;
     private float _timeSinceLastFrame;
-    private UIActions _uiActions;
-    private AnimationKey _draggedKey;
-    private VisualElement _hoveredFrame;
 
     private void OnEnable()
     {
         _timeLineEditor = GetComponent<UIDocument>().rootVisualElement.Q<TimelineEditor>();
 
-        _uiActions = new UIActions();
-        _uiActions.Enable();
-        _uiActions.Player.Delete.performed += Delete;
-        if (trackData != null)
-        {
-            foreach (FloatTrackData track in trackData.floatTracks)
-            {
-                AddTrack(track);
-            }
-        }
-        
+        deleteAction.Enable();
+        deleteAction.performed += DeleteKey;
+
+        _timeLineEditor.OnCursorMoved += OnCursorMoved;
+        _timeLineEditor.OnTrackTryDelete += TryDeleteTrack;
+
+        _timelineData = new TimelineData();
+        //if (trackData != null)
+        //{
+        //    foreach (FloatTrackData track in trackData.floatTracks)
+        //    {
+        //        _timeLineEditor.AddTrack(track);
+        //    }
+        //}
+    }
+
+    private void OnCursorMoved(int idx)
+    {
+        OnCursorMovedEvt?.Invoke(idx, _timelineData);
     }
 
     private void Update()
     {
+
+        if (Mouse.current.leftButton.wasReleasedThisFrame)
+        {
+            _timeLineEditor.OnMouseReleased();
+        }
+        //Cursor play logic
         if (_timeLineEditor.isPlaying)
         {
             float frameInterval = 1.0f / _timeLineEditor.FPS;
@@ -43,53 +59,61 @@ public class TimelineManager : MonoBehaviour
             _timeSinceLastFrame += Time.deltaTime;
             if (_timeSinceLastFrame >= frameInterval)
             {
-                _timeLineEditor.NextFrame();
+                _timeLineEditor.SetCursorToNextFrame();
                 _timeSinceLastFrame -= frameInterval;
             }
         }
+    }
 
-        if (Mouse.current.leftButton.wasPressedThisFrame)
+    public void AddKey(string trackName, float value)
+    {
+        FloatTrackData trackInfo;
+
+        if (!_timelineData.HasTrack(trackName, out trackInfo))
         {
-            _timeLineEditor.DeselectKeyframe();
-            _hoveredFrame = _timeLineEditor.hoveredElement;
-            if (_hoveredFrame != null && _timeLineEditor.frameMarkersWrapper.Contains(_hoveredFrame))
+            trackInfo = new FloatTrackData()
             {
-                _timeLineEditor.SetCurrentFrame(Int32.Parse(_hoveredFrame.name));
-            }else
-            if (_hoveredFrame != null && _hoveredFrame.childCount > 0)
-            {
-                AnimationKey key = _hoveredFrame.Query<AnimationKey>().First();
-                key.Select();
-                _draggedKey = key;
-            }
-        }else if (Mouse.current.leftButton.isPressed && _draggedKey != null && _timeLineEditor.hoveredElement !=null && _hoveredFrame != _timeLineEditor.hoveredElement)
+                trackName = trackName
+            };
+
+            _timelineData.floatTracks.Add(trackInfo);
+            _timeLineEditor.AddTrack(trackInfo);
+        }
+
+        var key = trackInfo.AddKey(_timeLineEditor.currentFrame, value, out bool wasOverriden);
+
+        if (!wasOverriden)
         {
-            _hoveredFrame = _timeLineEditor.hoveredElement;
-            _draggedKey.track.MoveKeyFrame(_draggedKey, Int32.Parse(_hoveredFrame.name) );
-        }else if (Mouse.current.leftButton.wasReleasedThisFrame)
-        {
-            _draggedKey = null;
+            _timeLineEditor.AddKeyToTrack(trackName, key);
         }
     }
-    
-    public void AddTrack(FloatTrackData floatTrackData)
+
+    //public void RemoveTrack(FloatTrackData floatTrackData)
+    //{
+    //    _timeLineEditor.RemoveTrack(floatTrackData);
+    //}
+
+    //public void AddKeyframe(FloatTrackData floatTrackData, KeyframeData<float> keyframe)
+    //{
+    //    _timeLineEditor.AddKeyframe(floatTrackData, keyframe);
+    //}
+
+    private void DeleteKey(InputAction.CallbackContext obj)
     {
-        _timeLineEditor.AddTrack(floatTrackData);
+        var key = _timeLineEditor.DeleteKeyframe();
+
+        if (key != null)
+        {
+            _timelineData.RemoveKey(key.keyframeData);
+        }
     }
 
-    public void RemoveTrack(FloatTrackData floatTrackData)
+    private void TryDeleteTrack(AnimationTrack track)
     {
-        _timeLineEditor.RemoveTrack(floatTrackData);
-    }
+        track.RemoveFromHierarchy();
+        _timelineData.RemoveTrack(track.trackName);
 
-    public void AddKeyframe(FloatTrackData floatTrackData, KeyframeData<float> keyframe)
-    {
-        _timeLineEditor.AddKeyframe(floatTrackData, keyframe);
-    }
-    
-    private void Delete(InputAction.CallbackContext obj)
-    {
-        _timeLineEditor.DeleteKeyframe();
+        OnTrackDeleted?.Invoke(track.trackName);
     }
 }
 

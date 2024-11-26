@@ -69,6 +69,7 @@ providers = {
 objectSelectors = {
 }
 recentSearches = [
+	"type: screenmode"
 	"type: TimeLineEdito"
 	"type: Timeline"
 	"type: name:\"\" TimeLineEditor"
