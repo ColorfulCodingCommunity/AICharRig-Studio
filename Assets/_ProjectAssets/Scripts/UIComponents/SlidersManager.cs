@@ -6,6 +6,8 @@ using UnityEngine.UIElements;
 
 public class SlidersManager : MonoBehaviour
 {
+    public event Action OnValuesChanged;
+
     [SerializeField]
     private TimelineManager timelineManager;
 
@@ -16,6 +18,8 @@ public class SlidersManager : MonoBehaviour
     private List<KeyableSlider> _sliders;
 
     private Button _resetSlidersBtn;
+
+    private bool _valuesChanged = false;
 
     void Start()
     {
@@ -33,37 +37,98 @@ public class SlidersManager : MonoBehaviour
         timelineManager.OnTrackDeleted += OnTrackDeleted;
         timelineManager.OnCursorMovedEvt += OnCursorMoved;
 
+        ScreenModesController.ScreenModeChanged += (mode) =>
+        {
+            drivingFaceControls.Reset();
+        };
+
         SetupSliderEvents();
+    }
+
+    private void Update()
+    {
+        if (_valuesChanged)
+        {
+            OnValuesChanged?.Invoke();
+            _valuesChanged = false;
+        }
     }
 
     private void SetupSliderEvents()
     {
         _slidersWrapper.Q<KeyableSlider>("LeftBrowSlider").OnValueChanged
-            += (val) => drivingFaceControls.SetLeftBrow(val);
+            += (val) =>
+            {
+                _valuesChanged = true;
+                drivingFaceControls.SetLeftBrow(val);
+            };
+
         _slidersWrapper.Q<KeyableSlider>("RightBrowSlider").OnValueChanged
-            += (val) => drivingFaceControls.SetRightBrow(val);
+            += (val) =>
+            {
+                _valuesChanged = true;
+                drivingFaceControls.SetRightBrow(val);
+            };
 
         _slidersWrapper.Q<KeyableSlider>("SmileSadLeftSlider").OnValueChanged
-            += (val) => drivingFaceControls.SetSmileLeft(val);
+            += (val) =>
+            {
+                _valuesChanged = true;
+                drivingFaceControls.SetSmileLeft(val);
+            };
         _slidersWrapper.Q<KeyableSlider>("SmileSadRightSlider").OnValueChanged
-            += (val) => drivingFaceControls.SetSmileRight(val);
+            += (val) =>
+            {
+                _valuesChanged = true;
+                drivingFaceControls.SetSmileRight(val);
+            };
 
         _slidersWrapper.Q<KeyableSlider>("MouthOpenSlider").OnValueChanged
-            += (val) => drivingFaceControls.SetMouthOpen(val);
+            += (val) =>
+            {
+                _valuesChanged = true;
+                drivingFaceControls.SetMouthOpen(val);
+            };
+
         _slidersWrapper.Q<KeyableSlider>("MouthPuffSlider").OnValueChanged
-            += (val) => drivingFaceControls.SetMouthPuff(val);
+            += (val) =>
+            {
+                _valuesChanged = true;
+                drivingFaceControls.SetMouthPuff(val);
+            };
 
         _slidersWrapper.Q<KeyableSlider>("EyesDirectionSlider").OnValueChanged
-            += (val) => drivingFaceControls.SetEyesDirection(val);
+            += (val) =>
+            {
+                _valuesChanged = true;
+                drivingFaceControls.SetEyesDirection(val);
+            };
         _slidersWrapper.Q<KeyableSlider>("EyesBlinkSlider").OnValueChanged
-            += (val) => drivingFaceControls.SetBlink(val);
+            += (val) =>
+            {
+                _valuesChanged = true;
+                drivingFaceControls.SetBlink(val);
+            };
 
         _slidersWrapper.Q<KeyableSlider>("HeadYawSlider").OnValueChanged
-            += (val) => drivingFaceControls.SetHeadYaw(val);
+            += (val) =>
+            {
+                _valuesChanged = true;
+                drivingFaceControls.SetHeadYaw(val);
+            };
+
         _slidersWrapper.Q<KeyableSlider>("HeadPitchSlider").OnValueChanged
-            += (val) => drivingFaceControls.SetHeadPitch(val);
+            += (val) =>
+            {
+                _valuesChanged = true;
+                drivingFaceControls.SetHeadPitch(val);
+            };
         _slidersWrapper.Q<KeyableSlider>("HeadRollSlider").OnValueChanged
-            += (val) => drivingFaceControls.SetHeadRoll(val);
+            += (val) =>
+            {
+                _valuesChanged = true;
+                drivingFaceControls.SetHeadRoll(val);
+            };
     }
 
     public async UniTask<List<KeyableSlider>> GetSliders()

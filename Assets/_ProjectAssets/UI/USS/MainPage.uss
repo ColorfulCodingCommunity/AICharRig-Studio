@@ -15,10 +15,14 @@
 }
 
 EnumField{
-    font-size: var(--font-mid);
+    font-size: var(--font-small);
 }
 EnumField .unity-base-field__label{
     display:none;
+}
+
+EnumField .unity-enum-field__text{
+    margin-right: 10px;
 }
 
 .panel{

@@ -10,6 +10,8 @@ public class LivePortraitManager : MonoSingleton<LivePortraitManager>
     private WebsocketManager websocketManager;
     [SerializeField]
     private MainPageImageView mainPageImageView;
+    [SerializeField]
+    private SlidersManager slidersManager;
 
     [Space]
     [SerializeField]
@@ -20,8 +22,8 @@ public class LivePortraitManager : MonoSingleton<LivePortraitManager>
     void Start()
     {
         timelineManager.OnCursorMovedEvt += OnCursorMoved;
-
         websocketManager.onTextureReceived += OnTextureReceived;
+        slidersManager.OnValuesChanged += SendImageRequest;
     }
 
     private void Update()
@@ -48,12 +50,17 @@ public class LivePortraitManager : MonoSingleton<LivePortraitManager>
         }
 
         websocketManager.Reset();
-        OnCursorMoved(0, null);
+        SendImageRequest();
     }
 
     private void OnCursorMoved(int _, TimelineData __)
     {
-        if(!websocketManager.isConnected)
+        SendImageRequest();
+    }
+
+    private void SendImageRequest()
+    {
+        if (!websocketManager.isConnected)
         {
             Debug.LogWarning("Websocket is not connected");
             return;
@@ -66,7 +73,7 @@ public class LivePortraitManager : MonoSingleton<LivePortraitManager>
             return;
         }
 
-        if(AssetManager.Instance.sourceAsset == null)
+        if (AssetManager.Instance.sourceAsset == null)
         {
             Debug.LogWarning("Source asset is not set");
             return;
