@@ -10,8 +10,12 @@ public class LivePortraitManager : MonoSingleton<LivePortraitManager>
     private WebsocketManager websocketManager;
     [SerializeField]
     private MainPageImageView mainPageImageView;
+
+    [Space]
     [SerializeField]
     private SlidersManager slidersManager;
+    [SerializeField]
+    private AudioPlayerComponent audioPlayerComponent;
 
     [Space]
     [SerializeField]
@@ -24,6 +28,17 @@ public class LivePortraitManager : MonoSingleton<LivePortraitManager>
         timelineManager.OnCursorMovedEvt += OnCursorMoved;
         websocketManager.onTextureReceived += OnTextureReceived;
         slidersManager.OnValuesChanged += SendImageRequest;
+        audioPlayerComponent.onAudioChanged += SendImageRequest;
+    }
+
+    public override void OnDestroy()
+    {
+        timelineManager.OnCursorMovedEvt -= OnCursorMoved;
+        websocketManager.onTextureReceived -= OnTextureReceived;
+        slidersManager.OnValuesChanged -= SendImageRequest;
+        audioPlayerComponent.onAudioChanged -= SendImageRequest;
+
+        base.OnDestroy();
     }
 
     private void Update()
@@ -60,27 +75,33 @@ public class LivePortraitManager : MonoSingleton<LivePortraitManager>
 
     private void SendImageRequest()
     {
+        TrySendImageRequest();
+    }
+
+    public bool TrySendImageRequest()
+    {
         if (!websocketManager.isConnected)
         {
             Debug.LogWarning("Websocket is not connected");
-            return;
+            return false;
         }
 
         if (websocketManager.isSendingMessage)
         {
             Debug.LogWarning("Websocket is already sending a message. Message queued!");
             isFrameQueued = true;
-            return;
+            return true;
         }
 
         if (AssetManager.Instance.sourceAsset == null)
         {
             Debug.LogWarning("Source asset is not set");
-            return;
+            return false;
         }
 
         websocketManager.SendSourceImage(AssetManager.Instance.sourceAsset);
         websocketManager.SendDrivingImage(drivingImage);
+        return true;
     }
 
     private void OnTextureReceived(Texture texture)

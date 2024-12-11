@@ -36,10 +36,10 @@ public partial class KeyableSlider : VisualElement
     public KeyableSlider()
     {
         var visualTree =
-            AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/_ProjectAssets/UI/UIDocs/KeyableSlider.uxml");
+            Resources.Load<VisualTreeAsset>("UI/UIDocs/KeyableSlider");
         visualTree.CloneTree(this);
 
-        var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/_ProjectAssets/UI/USS/TimelineEditor.uss");
+        var styleSheet = Resources.Load<StyleSheet>("UI/USS/TimelineEditor");
         styleSheets.Add(styleSheet);
 
         this.AddToClassList("keyable-slider");

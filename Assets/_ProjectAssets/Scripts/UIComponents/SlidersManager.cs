@@ -31,7 +31,7 @@ public class SlidersManager : MonoBehaviour
             slider.OnKeyButtonClickedEvent += () => OnKeyedSliderPressed(slider);
         }
 
-        _resetSlidersBtn = _slidersWrapper.Q<Button>("ResetSlidersBtn");
+        _resetSlidersBtn = _slidersWrapper.Q<VisualElement>("Sliders").Q<Button>("ResetSlidersBtn");
         _resetSlidersBtn.clicked += () => drivingFaceControls.Reset();
 
         timelineManager.OnTrackDeleted += OnTrackDeleted;

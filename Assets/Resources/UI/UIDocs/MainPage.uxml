@@ -1,8 +1,9 @@
 <engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/_ProjectAssets/UI/USS/MainPage.uss?fileID=7433441132597879392&amp;guid=cd83c44992671e34ab21cbd474bf7774&amp;type=3#MainPage" />
     <engine:VisualElement name="Wrapper" style="flex-grow: 1; flex-direction: column;">
-        <engine:VisualElement name="Top" style="flex-grow: 1; height: 20px;">
-            <engine:EnumField label="Enum" value="Center" type="ScreenModeEnum, Assembly-CSharp" name="ScreenModesEnumField" style="width: 150px;" />
+        <engine:VisualElement name="Top" style="height: 45px; flex-direction: row; justify-content: space-between; padding-top: 5px; padding-right: 5px; padding-bottom: 5px; padding-left: 5px;">
+            <engine:EnumField label="Enum" value="Center" type="ScreenModeEnum, Assembly-CSharp" name="ScreenModesEnumField" style="width: 150px; -unity-font-style: bold;" />
+            <engine:Button text="Render &gt;" name="RenderBtn" class="action-button" style="background-color: rgb(108, 32, 156);" />
         </engine:VisualElement>
         <engine:VisualElement name="Body" style="flex-grow: 1; flex-direction: row;">
             <engine:VisualElement name="Center" style="flex-grow: 1; padding-top: 10px; padding-right: 20px; padding-bottom: 10px; padding-left: 20px;">
@@ -18,7 +19,7 @@
                 </engine:VisualElement>
                 <engine:VisualElement name="AudioPlayer" class="panel" style="flex-direction: column; height: 150px; display: none;">
                     <engine:VisualElement name="HasAudioWrapper" style="flex-grow: 1; display: none;">
-                        <engine:VisualElement name="ControlsWrapper" style="height: 40px;">
+                        <engine:VisualElement name="AudioControlsWrapper" style="height: 40px;">
                             <engine:VisualElement name="Controls" style="flex-grow: 1; flex-direction: row; justify-content: center;">
                                 <engine:Button text="&#10;" name="PlayButton" style="width: 40px; height: 40px;">
                                     <engine:VisualElement style="flex-grow: 1; background-image: url(&quot;project://database/Assets/_ProjectAssets/UI/Icons/play-button-arrowhead.png?fileID=2800000&amp;guid=a3cb1cbf6dc16ae4b8e100326bb6400e&amp;type=3#play-button-arrowhead&quot;);" />
@@ -42,7 +43,7 @@
                         <engine:Label text="Upload Audio" />
                     </engine:Button>
                 </engine:VisualElement>
-                <TimelineEditor name="TimelineEditor" style="width: 700px; height: 250px; display: flex;" />
+                <TimelineEditor name="TimelineEditor" style="width: 700px; height: 250px; display: none;" />
             </engine:VisualElement>
             <engine:VisualElement name="ControlsWrapper" style="flex-grow: 1; padding-left: 10px; padding-right: 10px; padding-top: 20px; width: 350px; flex-direction: column-reverse; align-items: center;">
                 <engine:VisualElement name="BackEndControls" class="panel" style="width: 250px; margin-top: 25px; margin-bottom: 15px;">
@@ -54,7 +55,7 @@
                         <engine:Label text="Connect to AI Server" style="margin-left: 10px;" />
                     </engine:Button>
                 </engine:VisualElement>
-                <engine:VisualElement name="Sliders" class="panel" style="width: 250px; display: flex; height: 450px;">
+                <engine:VisualElement name="Sliders" class="panel" style="width: 250px; display: none; height: 450px;">
                     <KeyableSlider label="Left Brow" name="LeftBrowSlider" />
                     <KeyableSlider label="Right Brow" name="RightBrowSlider" />
                     <engine:VisualElement name="Spacer" style="height: 20px;" />
@@ -75,6 +76,7 @@
                     </engine:Button>
                 </engine:VisualElement>
             </engine:VisualElement>
+            <engine:Label text="SOON" name="TODO" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; align-items: center; justify-content: center; -unity-text-align: middle-center; font-size: 100px; color: rgb(255, 255, 255); background-color: rgba(0, 0, 0, 0.65); display: none;" />
         </engine:VisualElement>
     </engine:VisualElement>
 </engine:UXML>

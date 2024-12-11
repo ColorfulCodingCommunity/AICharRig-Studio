@@ -1,11 +1,7 @@
 using Cysharp.Threading.Tasks;
 using System;
 using System.Threading.Tasks;
-using TMPro.EditorUtilities;
-using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
 [UxmlElement("TimelineEditor")]
@@ -46,10 +42,10 @@ public partial class TimelineEditor : VisualElement
     public TimelineEditor()
     {
         var visualTree =
-            AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/_ProjectAssets/UI/UIDocs/TimelineEditor.uxml");
+            Resources.Load<VisualTreeAsset>("UI/UIDocs/TimelineEditor");
         visualTree.CloneTree(this);
 
-        var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/_ProjectAssets/UI/USS/TimelineEditor.uss");
+        var styleSheet = Resources.Load<StyleSheet>("UI/USS/TimelineEditor");
         styleSheets.Add(styleSheet);
         
         _cursor = this.Q<VisualElement>("cursorWrapper");

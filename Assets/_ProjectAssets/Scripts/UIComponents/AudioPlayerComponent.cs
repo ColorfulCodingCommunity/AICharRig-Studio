@@ -5,7 +5,11 @@ using UnityEngine.UIElements;
 
 public class AudioPlayerComponent : MonoBehaviour
 {
+    public event Action onAudioChanged;
     public AudioSource audioSource;
+
+    [HideInInspector]
+    public bool shouldAutoUpdate = true;
 
     private bool _hasAudio = false;
     private VisualElement _audioWrapper;
@@ -14,6 +18,7 @@ public class AudioPlayerComponent : MonoBehaviour
     private Label _timeCode;
     private VisualElement _timeline;
     private VisualElement _knob;
+    private Button _renderBtn;
 
     void Start()
     {
@@ -35,6 +40,14 @@ public class AudioPlayerComponent : MonoBehaviour
         _knob = _timeline.Q<VisualElement>("Knob");
 
         _timeline.RegisterCallback<ClickEvent>(SetTimeOnCLick);
+    }
+
+    private void Update()
+    {
+        if (shouldAutoUpdate && audioSource.isPlaying)
+        {
+            onAudioChanged?.Invoke();
+        }
     }
 
     private void TryGetAudio()

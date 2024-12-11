@@ -16,7 +16,7 @@ public class AssetManager : MonoSingleton<AssetManager>
 
     public void GetSourceAssetFile(Action<Texture2D> callback)
     {
-        FileBrowser.SetFilters(true, new string[] { ".jpg", ".png", ".mp4" });
+        FileBrowser.SetFilters(false, new string[] { ".jpg", ".png", ".mp4" });
         FileBrowser.ShowLoadDialog(
             (path) =>
         {
@@ -33,15 +33,13 @@ public class AssetManager : MonoSingleton<AssetManager>
 
     public void GetDrivingAudioFile(Action<AudioClip> callback)
     {
-        FileBrowser.SetFilters(true, new string[] { ".mp3", ".wav" });
+        FileBrowser.SetFilters(false, new string[] { ".mp3", ".wav" });
         FileBrowser.ShowLoadDialog(
             (path) =>
             {
                 drivingAudio = LoadAudio(path[0]);
                 callback(drivingAudio);
             }, null, FileBrowser.PickMode.Files, false, null, null, "Load Audio", "Select");
-
-
     }
 
     public void RemoveDrivingAudio()

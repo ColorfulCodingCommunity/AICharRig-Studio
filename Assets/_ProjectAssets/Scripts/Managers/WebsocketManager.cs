@@ -49,8 +49,8 @@ public class WebsocketManager : MonoSingleton<WebsocketManager>
 
         _websocket.OnMessage += (bytes) =>
         {
-            onTextureReceived?.Invoke(BytesToTexture(bytes));
             isSendingMessage = false;
+            onTextureReceived?.Invoke(BytesToTexture(bytes));
         };
         await _websocket.Connect();
     }
