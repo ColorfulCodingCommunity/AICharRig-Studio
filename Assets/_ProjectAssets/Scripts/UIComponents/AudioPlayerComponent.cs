@@ -18,7 +18,6 @@ public class AudioPlayerComponent : MonoBehaviour
     private Label _timeCode;
     private VisualElement _timeline;
     private VisualElement _knob;
-    private Button _renderBtn;
 
     void Start()
     {

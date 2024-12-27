@@ -1,6 +1,7 @@
 using NativeWebSocket;
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class WebsocketManager : MonoSingleton<WebsocketManager>
 {
@@ -114,20 +115,20 @@ public class WebsocketManager : MonoSingleton<WebsocketManager>
 
     private byte[] TextureToBytes(RenderTexture drivingTex)
     {
-        Texture2D tex = new Texture2D(drivingTex.width, drivingTex.height, TextureFormat.RGB24, false);
+        Texture2D tex = new Texture2D(drivingTex.width, drivingTex.height, TextureFormat.RGBA32, false, false);
         RenderTexture.active = drivingTex;
         tex.ReadPixels(new Rect(0, 0, drivingTex.width, drivingTex.height), 0, 0);
         tex.Apply();
         RenderTexture.active = null;
 
-        byte[] bytes = tex.EncodeToJPG();
+        byte[] bytes = tex.EncodeToPNG();
 
         return bytes;
     }
 
     private Texture BytesToTexture(byte[] stream)
     {
-        Texture2D texture = new Texture2D(2, 2, TextureFormat.RGB24, false);
+        Texture2D texture = new Texture2D(2, 2, TextureFormat.RGBA32, false, false);
         if (texture.LoadImage(stream))
         {
             return texture;

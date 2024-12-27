@@ -13,19 +13,22 @@ public class TimelineManager : MonoBehaviour
 
     public InputAction deleteAction;
 
+    [HideInInspector]
+    public TimelineEditor timeLineEditor;
+
     private TimelineData _timelineData;
-    private TimelineEditor _timeLineEditor;
+
     private float _timeSinceLastFrame;
 
     private void OnEnable()
     {
-        _timeLineEditor = GetComponent<UIDocument>().rootVisualElement.Q<TimelineEditor>();
+        timeLineEditor = GetComponent<UIDocument>().rootVisualElement.Q<TimelineEditor>();
 
         deleteAction.Enable();
         deleteAction.performed += DeleteKey;
 
-        _timeLineEditor.OnCursorMoved += OnCursorMoved;
-        _timeLineEditor.OnTrackTryDelete += TryDeleteTrack;
+        timeLineEditor.OnCursorMoved += OnCursorMoved;
+        timeLineEditor.OnTrackTryDelete += TryDeleteTrack;
 
         _timelineData = new TimelineData();
         //if (trackData != null)
@@ -44,20 +47,19 @@ public class TimelineManager : MonoBehaviour
 
     private void Update()
     {
-
         if (Mouse.current.leftButton.wasReleasedThisFrame)
         {
-            _timeLineEditor.OnMouseReleased();
+            timeLineEditor.OnMouseReleased();
         }
         //Cursor play logic
-        if (_timeLineEditor.isPlaying)
+        if (timeLineEditor.isPlaying)
         {
-            float frameInterval = 1.0f / _timeLineEditor.FPS;
+            float frameInterval = 1.0f / timeLineEditor.FPS;
 
             _timeSinceLastFrame += Time.deltaTime;
             if (_timeSinceLastFrame >= frameInterval)
             {
-                _timeLineEditor.SetCursorToNextFrame();
+                timeLineEditor.SetCursorToNextFrame();
                 _timeSinceLastFrame -= frameInterval;
             }
         }
@@ -75,14 +77,14 @@ public class TimelineManager : MonoBehaviour
             };
 
             _timelineData.floatTracks.Add(trackInfo);
-            _timeLineEditor.AddTrack(trackInfo);
+            timeLineEditor.AddTrack(trackInfo);
         }
 
-        var key = trackInfo.AddKey(_timeLineEditor.currentFrame, value, out bool wasOverriden);
+        var key = trackInfo.AddKey(timeLineEditor.currentFrame, value, out bool wasOverriden);
 
         if (!wasOverriden)
         {
-            _timeLineEditor.AddKeyToTrack(trackName, key);
+            timeLineEditor.AddKeyToTrack(trackName, key);
         }
     }
 
@@ -98,7 +100,7 @@ public class TimelineManager : MonoBehaviour
 
     private void DeleteKey(InputAction.CallbackContext obj)
     {
-        var key = _timeLineEditor.DeleteKeyframe();
+        var key = timeLineEditor.DeleteKeyframe();
 
         if (key != null)
         {

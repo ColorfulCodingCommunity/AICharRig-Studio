@@ -16,16 +16,28 @@ public class MainPageImageView : MonoBehaviour
         _uploadSourceAsset = _wrapper.Q<VisualElement>("SourceAsset");
 
         _uploadBut = _uploadSourceAsset.Q<VisualElement>("UploadBut");
-        _uploadBut.RegisterCallback<MouseUpEvent>(evt => AssetManager.Instance.GetSourceAssetFile(tex =>
+        _uploadBut.RegisterCallback<MouseUpEvent>(evt => AssetManager.Instance.GetSourceAssetFile(
+        tex =>
         {
-            _closeBut.style.display = DisplayStyle.Flex;
             SetSourceAsset(tex);
+        },
+        (rt) =>
+        {
+            SetSourceAsset(AssetManager.Instance.GetSourceAssetImage());
         }));
 
         _closeBut = _uploadSourceAsset.Q<Button>("CloseBut");
         _closeBut.clicked += RemoveSourceAsset;
 
         _closeBut.style.display = DisplayStyle.None;
+    }
+
+
+    private int idx = 0;
+    [ContextMenu("TEST")]
+    public void GetNextFrame()
+    {
+        SetSourceAsset(AssetManager.Instance.GetSourceAssetImage(idx++));
     }
 
     public void SetSourceAsset(Texture2D tex)

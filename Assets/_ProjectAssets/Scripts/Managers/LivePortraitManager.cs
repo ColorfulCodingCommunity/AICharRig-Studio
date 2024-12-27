@@ -1,6 +1,7 @@
 using System;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LivePortraitManager : MonoSingleton<LivePortraitManager>
 {
@@ -20,6 +21,8 @@ public class LivePortraitManager : MonoSingleton<LivePortraitManager>
     [Space]
     [SerializeField]
     private RenderTexture drivingImage;
+
+    public RawImage target;
 
     private bool isFrameQueued = false;
 
@@ -58,7 +61,7 @@ public class LivePortraitManager : MonoSingleton<LivePortraitManager>
             return;
         }
 
-        if (AssetManager.Instance.sourceAsset == null)
+        if (AssetManager.Instance.GetSourceAssetImage() == null)
         {
             Debug.LogWarning("Source asset is not set");
             return;
@@ -68,17 +71,22 @@ public class LivePortraitManager : MonoSingleton<LivePortraitManager>
         SendImageRequest();
     }
 
-    private void OnCursorMoved(int _, TimelineData __)
+    private void OnCursorMoved(int frameIdx, TimelineData __)
     {
-        SendImageRequest();
+        SendImageRequest(frameIdx);
+    }
+
+    private void SendImageRequest(int frameIdx)
+    {
+        TrySendImageRequest(frameIdx);
     }
 
     private void SendImageRequest()
     {
-        TrySendImageRequest();
+        TrySendImageRequest(0);
     }
 
-    public bool TrySendImageRequest()
+    public bool TrySendImageRequest(int frameIdx)
     {
         if (!websocketManager.isConnected)
         {
@@ -93,13 +101,15 @@ public class LivePortraitManager : MonoSingleton<LivePortraitManager>
             return true;
         }
 
-        if (AssetManager.Instance.sourceAsset == null)
+        Texture2D sourceImage = AssetManager.Instance.GetSourceAssetImage(frameIdx);
+        if (sourceImage == null)
         {
             Debug.LogWarning("Source asset is not set");
             return false;
         }
 
-        websocketManager.SendSourceImage(AssetManager.Instance.sourceAsset);
+        target.texture = sourceImage;
+        websocketManager.SendSourceImage(sourceImage);
         websocketManager.SendDrivingImage(drivingImage);
         return true;
     }

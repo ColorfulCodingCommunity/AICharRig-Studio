@@ -8,6 +8,9 @@ public class RenderComponent : MonoBehaviour
     [SerializeField]
     private AudioLipsyncRenderer audioLipsyncRenderer;
     [SerializeField]
+    private BlendshapesRenderer blendshapesRenderer;
+
+    [SerializeField]
     private ScreenModesController screenModesController;
 
     private VisualElement _topBar;
@@ -30,7 +33,14 @@ public class RenderComponent : MonoBehaviour
                 {
                     audioLipsyncRenderer.Render(path[0]);
                 }, null, FileBrowser.PickMode.Folders, false, null, null, "Save to Folder", "Select");
-            
+        }else if(screenModesController.screenMode == ScreenModeEnum.BlendShapeDriver)
+        {
+            FileBrowser.SetFilters(true);
+            FileBrowser.ShowLoadDialog(
+                (path) =>
+                {
+                    blendshapesRenderer.Render(path[0]);
+                }, null, FileBrowser.PickMode.Folders, false, null, null, "Save to Folder", "Select");
         }
     }
 }

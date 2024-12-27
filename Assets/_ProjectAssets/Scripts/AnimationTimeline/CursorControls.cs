@@ -38,7 +38,7 @@ public class CursorControls
         _timelineEditor.isPlaying = false;
     }
 
-    private void Stop()
+    public void Stop()
     {
         _timelineEditor.isPlaying = false;
 

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using uLipSync;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class AudioLipsyncRenderer : MonoBehaviour
 {
@@ -104,7 +105,6 @@ public class AudioLipsyncRenderer : MonoBehaviour
             _recording.blendShapesKeys.Add(key);
             return;
         }
-
         if (_isRecordingBlendshapes && !audioPlayer.audioSource.isPlaying)
         {
             _isRecordingBlendshapes = false;
@@ -149,7 +149,7 @@ public class AudioLipsyncRenderer : MonoBehaviour
             }
 
             _isWaitingForServerResponse = true;
-            livePortraitManager.TrySendImageRequest();
+            livePortraitManager.TrySendImageRequest(0);
 
             await UniTask.WaitUntil(() => !_isWaitingForServerResponse);
 
@@ -158,7 +158,7 @@ public class AudioLipsyncRenderer : MonoBehaviour
                 $"Rendering Images ({_frameIndex}/{_recording.blendShapesKeys.Count})");
         }
 
-        renderingEngine.ImageSequenceToVideo(_targetPath, _imageSequenceTargetPath, _auxiliaryOutFolder);
+        renderingEngine.ImageSequenceToVideoAndAudio(_targetPath, _imageSequenceTargetPath, _auxiliaryOutFolder);
         ResetState();
     }
 
@@ -179,6 +179,9 @@ public class AudioLipsyncRenderer : MonoBehaviour
 
     private void ResetState()
     {
+
+        websocketManager.onTextureReceived -= SaveTexture;
+
         if (Directory.Exists(_imageSequenceTargetPath))
         {
             Directory.Delete(_imageSequenceTargetPath, true);
@@ -192,6 +195,9 @@ public class AudioLipsyncRenderer : MonoBehaviour
         LoadingScreen.Instance.Hide();
         audioPlayer.audioSource.loop = true;
         audioPlayer.shouldAutoUpdate = true;
+
+        lipSyncBlendShape.enabled = true;
+
     }
 
     private void SaveTexture(Texture texture)
@@ -199,7 +205,7 @@ public class AudioLipsyncRenderer : MonoBehaviour
         var fileName = "frame_" + _frameIndex++ + ".png";
 
         var bytes = ((Texture2D)texture).EncodeToPNG();
-        System.IO.File.WriteAllBytes(Path.Combine(_imageSequenceTargetPath, fileName), bytes);
+        File.WriteAllBytes(Path.Combine(_imageSequenceTargetPath, fileName), bytes);
 
         _isWaitingForServerResponse = false;
     }

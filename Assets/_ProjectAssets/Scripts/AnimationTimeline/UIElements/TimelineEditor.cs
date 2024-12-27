@@ -23,7 +23,8 @@ public partial class TimelineEditor : VisualElement
 
     public AnimationTrack frameMarkersWrapper;
 
-    private CursorControls _cursorControls;
+    [HideInInspector]
+    public CursorControls cursorControls;
 
     private VisualElement _cursor;
     private VisualElement _animationTracksWrapper;
@@ -54,13 +55,13 @@ public partial class TimelineEditor : VisualElement
 
         RegisterCallback<AttachToPanelEvent>(OnAttachedToPanel);
 
-        _cursorControls = new CursorControls();
-        _cursorControls.Init(this);
+        cursorControls = new CursorControls();
+        cursorControls.Init(this);
     }
 
     private void OnAttachedToPanel(AttachToPanelEvent evt)
     {
-        _cursorControls.OnAttachPanel();
+        cursorControls.OnAttachPanel();
 
         ResetTracks();
 
@@ -131,6 +132,7 @@ public partial class TimelineEditor : VisualElement
     public void SetCursorToNextFrame()
     {
         currentFrame++;
+        Debug.Log($"FRAME {currentFrame}");
         SetCursor();
     }
 

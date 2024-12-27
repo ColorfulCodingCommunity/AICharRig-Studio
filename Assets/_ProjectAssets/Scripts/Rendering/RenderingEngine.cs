@@ -9,6 +9,7 @@ public class RenderingEngine : MonoBehaviour
         var ffmpegPath = Path.Join(Application.streamingAssetsPath, "ffmpeg-7.1-essentials_build", "bin");
         ffmpegPath = Path.Combine(ffmpegPath, "ffmpeg.exe");
 
+        UnityEngine.Debug.Log($"Running command: {ffmpegPath} {arguments}");
         ProcessStartInfo processStartInfo = new ProcessStartInfo
         {
             FileName = ffmpegPath,
@@ -34,17 +35,32 @@ public class RenderingEngine : MonoBehaviour
         }
     }
 
-    public void ImageSequenceToVideo(string mainFolder, string imageSequencePath, string auxOutPath)
+    public void ImageSequenceToVideoAndAudio(string mainFolder, string imageSequencePath, string auxOutPath)
     {
-
-        //Generate mp4 from image sequence
-        RunFFMpeg($"-framerate 30 -i {imageSequencePath}\\frame_%d.png -c:v libx264 -r 30 {auxOutPath}\\output.mp4");
+        ImageSequenceToVideo(imageSequencePath, auxOutPath);
 
         //Add audio to the video
         AudioClip drivingAudio = AssetManager.Instance.drivingAudio;
         string audioPath = Path.Combine(auxOutPath, "out.wav");
-
         SavWav.Save(audioPath, drivingAudio);
-        RunFFMpeg($"-i {auxOutPath}\\output.mp4 -i {audioPath} -c copy -map 0:v:0 -map 1:a:0 {mainFolder}\\out_final.mp4");
+
+        string outputPath = Path.Combine(mainFolder, "out.mp4");
+        if (File.Exists(outputPath))
+        {
+            File.Delete(outputPath);
+        }
+
+        RunFFMpeg($"-i {auxOutPath}\\out.mp4 -i {audioPath} -c copy -map 0:v:0 -map 1:a:0 {outputPath}");
+    }
+
+    public void ImageSequenceToVideo(string imageSequencePath, string outputFolderPath)
+    {
+        string outputPath = Path.Combine(outputFolderPath, "out.mp4");
+        if (File.Exists(outputPath))
+        {
+            File.Delete(outputPath);
+        }
+
+        RunFFMpeg($"-framerate 30 -i {imageSequencePath}\\frame_%d.png -c:v libx264 -r 30 -pix_fmt yuv420p {outputPath}");
     }
 }
