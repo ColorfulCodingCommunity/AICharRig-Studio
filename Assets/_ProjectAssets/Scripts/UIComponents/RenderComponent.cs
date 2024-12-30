@@ -6,12 +6,7 @@ using UnityEngine.UIElements;
 public class RenderComponent : MonoBehaviour
 {
     [SerializeField]
-    private AudioLipsyncRenderer audioLipsyncRenderer;
-    [SerializeField]
-    private BlendshapesRenderer blendshapesRenderer;
-
-    [SerializeField]
-    private ScreenModesController screenModesController;
+    private CommonRenderer commonRenderer;
 
     private VisualElement _topBar;
 
@@ -24,23 +19,30 @@ public class RenderComponent : MonoBehaviour
 
     private void Render()
     {
-        Debug.Log("Trying to render " + screenModesController.screenMode);
-        if (screenModesController.screenMode == ScreenModeEnum.AudioLipsync)
-        {
-            FileBrowser.SetFilters(true);
-            FileBrowser.ShowLoadDialog(
-                (path) =>
-                {
-                    audioLipsyncRenderer.Render(path[0]);
-                }, null, FileBrowser.PickMode.Folders, false, null, null, "Save to Folder", "Select");
-        }else if(screenModesController.screenMode == ScreenModeEnum.BlendShapeDriver)
-        {
-            FileBrowser.SetFilters(true);
-            FileBrowser.ShowLoadDialog(
-                (path) =>
-                {
-                    blendshapesRenderer.Render(path[0]);
-                }, null, FileBrowser.PickMode.Folders, false, null, null, "Save to Folder", "Select");
-        }
+
+        FileBrowser.SetFilters(true);
+        FileBrowser.ShowLoadDialog(
+            (path) =>
+            {
+                commonRenderer.Render(path[0]);
+            }, null, FileBrowser.PickMode.Folders, false, null, null, "Save to Folder", "Select");
+
+        //if (screenModesController.screenMode == ScreenModeEnum.AudioLipsync)
+        //{
+        //    FileBrowser.SetFilters(true);
+        //    FileBrowser.ShowLoadDialog(
+        //        (path) =>
+        //        {
+        //            audioLipsyncRenderer.Render(path[0]);
+        //        }, null, FileBrowser.PickMode.Folders, false, null, null, "Save to Folder", "Select");
+        //}else if(screenModesController.screenMode == ScreenModeEnum.BlendShapeDriver)
+        //{
+        //    FileBrowser.SetFilters(true);
+        //    FileBrowser.ShowLoadDialog(
+        //        (path) =>
+        //        {
+        //            blendshapesRenderer.Render(path[0]);
+        //        }, null, FileBrowser.PickMode.Folders, false, null, null, "Save to Folder", "Select");
+        //}
     }
 }

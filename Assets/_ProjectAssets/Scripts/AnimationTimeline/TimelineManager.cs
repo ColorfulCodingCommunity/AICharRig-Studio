@@ -88,15 +88,27 @@ public class TimelineManager : MonoBehaviour
         }
     }
 
-    //public void RemoveTrack(FloatTrackData floatTrackData)
-    //{
-    //    _timeLineEditor.RemoveTrack(floatTrackData);
-    //}
+    public void AddAudioRangeKey(AudioClip audio, string title)
+    {
+        RangeTrackData trackInfo;
 
-    //public void AddKeyframe(FloatTrackData floatTrackData, KeyframeData<float> keyframe)
-    //{
-    //    _timeLineEditor.AddKeyframe(floatTrackData, keyframe);
-    //}
+        trackInfo = new RangeTrackData()
+        {
+            trackName = title,
+            audioClip = audio
+        };
+
+        timeLineEditor.AddAudioTrack(trackInfo);
+
+        var totalFrames = Mathf.FloorToInt(audio.length * 30);
+        if(timeLineEditor.maxFrame < totalFrames)
+        {
+            timeLineEditor.cursorControls.SetMaxFrame(totalFrames);
+        }
+
+        trackInfo.SetStartKey(0, Mathf.FloorToInt(audio.length * 30));
+        timeLineEditor.AddKeyRangeToTrack(trackInfo);
+    }
 
     private void DeleteKey(InputAction.CallbackContext obj)
     {

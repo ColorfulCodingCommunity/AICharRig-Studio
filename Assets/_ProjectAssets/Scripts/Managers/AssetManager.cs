@@ -85,14 +85,15 @@ public class AssetManager : MonoSingleton<AssetManager>
         return tex;
     }
 
-    public void GetDrivingAudioFile(Action<AudioClip> callback)
+    public void GetDrivingAudioFile(Action<AudioClip, string> callback)
     {
         FileBrowser.SetFilters(false, new string[] { ".mp3", ".wav" });
         FileBrowser.ShowLoadDialog(
             (path) =>
             {
                 drivingAudio = LoadAudio(path[0]);
-                callback(drivingAudio);
+                string filename = System.IO.Path.GetFileName(path[0]);
+                callback(drivingAudio, filename);
             }, null, FileBrowser.PickMode.Files, false, null, null, "Load Audio", "Select");
     }
 

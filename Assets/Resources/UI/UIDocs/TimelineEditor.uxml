@@ -1,5 +1,5 @@
 <engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/_ProjectAssets/UI/USS/TimeLineEditor.uss?fileID=7433441132597879392&amp;guid=111ec3d398cf9e54ba630311d7464a87&amp;type=3#TimeLineEditor" />
+    <Style src="project://database/Assets/Resources/UI/USS/TimeLineEditor.uss?fileID=7433441132597879392&amp;guid=111ec3d398cf9e54ba630311d7464a87&amp;type=3#TimeLineEditor" />
     <engine:VisualElement name="wrapper" class="fullSize">
         <engine:VisualElement name="topBar">
             <engine:VisualElement name="frameUtilsWrapper" class="topBarWrapper">
@@ -7,27 +7,27 @@
                     <engine:Label text="FPS:" />
                     <engine:IntegerField value="10" name="fpsValue" max-length="2" />
                 </engine:VisualElement>
-                <engine:VisualElement name="VisualElement" class="integerField greyText bold midText" style="flex-direction: row; font-size: 11px;">
+                <engine:VisualElement name="VisualElement" class="integerField greyText midText" style="flex-direction: row; font-size: 11px;">
                     <engine:Label text="Total Frames:" />
-                    <engine:IntegerField value="42" name="maxFrame" max-length="4" />
+                    <engine:IntegerField value="42" name="maxFrame" max-length="4" class="bold" />
                 </engine:VisualElement>
             </engine:VisualElement>
             <engine:VisualElement name="playerWrapper" class="topBarWrapper">
                 <engine:Button name="playButton" triple-click-selects-line="false" data-source-type="TimelineEditor, Assembly-CSharp" class="roundedBorder">
-                    <engine:VisualElement style="flex-grow: 1; background-image: url(&quot;project://database/Assets/_ProjectAssets/UI/Textures/play-button-arrowhead.png?fileID=2800000&amp;guid=a3cb1cbf6dc16ae4b8e100326bb6400e&amp;type=3#play-button-arrowhead&quot;);" />
+                    <engine:VisualElement style="flex-grow: 1; background-image: url(&quot;project://database/Assets/_ProjectAssets/UI/Icons/play-button-arrowhead.png?fileID=2800000&amp;guid=a3cb1cbf6dc16ae4b8e100326bb6400e&amp;type=3#play-button-arrowhead&quot;);" />
                 </engine:Button>
                 <engine:Button name="pauseButton" class="roundedBorder">
-                    <engine:VisualElement style="flex-grow: 1; background-image: url(&quot;project://database/Assets/_ProjectAssets/UI/Textures/pause.png?fileID=2800000&amp;guid=e1a89537ac9a5fd4a91ef6455492133c&amp;type=3#pause&quot;);" />
+                    <engine:VisualElement style="flex-grow: 1; background-image: url(&quot;project://database/Assets/_ProjectAssets/UI/Icons/pause.png?fileID=2800000&amp;guid=e1a89537ac9a5fd4a91ef6455492133c&amp;type=3#pause&quot;);" />
                 </engine:Button>
                 <engine:Button name="stopButton" class="roundedBorder">
-                    <engine:VisualElement style="flex-grow: 1; background-image: url(&quot;project://database/Assets/_ProjectAssets/UI/Textures/stop-button.png?fileID=2800000&amp;guid=a7884b6e76edcc64eb3d0d73b6af27ff&amp;type=3#stop-button&quot;);" />
+                    <engine:VisualElement style="flex-grow: 1; background-image: url(&quot;project://database/Assets/_ProjectAssets/UI/Icons/stop-button.png?fileID=2800000&amp;guid=a7884b6e76edcc64eb3d0d73b6af27ff&amp;type=3#stop-button&quot;);" />
                 </engine:Button>
             </engine:VisualElement>
             <engine:VisualElement name="zoomWrapper" class="topBarWrapper">
                 <engine:Slider high-value="10" name="zoomSlider" low-value="3" value="5" style="width: 50%;" />
             </engine:VisualElement>
         </engine:VisualElement>
-        <engine:ScrollView name="mainContainer" mode="Horizontal" focusable="false" touch-scroll-type="Clamped" horizontal-scroller-visibility="Hidden">
+        <engine:ScrollView name="mainContainer" mode="Horizontal" focusable="false" touch-scroll-type="Clamped" horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="Hidden">
             <engine:VisualElement name="animationTracksWrapper">
                 <AnimationTrack trackName="rth">
                     <engine:VisualElement class="trackName" style="flex-grow: 1; height: 10px;">

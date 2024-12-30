@@ -117,6 +117,21 @@ public partial class TimelineEditor : VisualElement
         SetZoom(_currentZoom);
     }
 
+    public async void AddAudioTrack(RangeTrackData trackData)
+    {
+        var track = new AnimationTrack(trackData.trackName, this);
+        _animationTracksWrapper.Add(track);
+
+        track.OnTrackDeleteButtonPressed += (track) => OnTrackTryDelete?.Invoke(track);
+        track.OnKeyClicked += SelectKeyframe;
+        track.OnKeyDragStart += StartKeyDrag;
+
+        ResetTracks();
+
+        await UniTask.WaitForEndOfFrame();
+        SetZoom(_currentZoom);
+    }
+
     public void AddKeyToTrack(string trackName, KeyframeData<float> key)
     {
         foreach (AnimationTrack track in _animationTracksWrapper.Children())
@@ -129,10 +144,21 @@ public partial class TimelineEditor : VisualElement
         }
     }
 
+    public void AddKeyRangeToTrack(RangeTrackData trackData)
+    {
+        foreach (AnimationTrack track in _animationTracksWrapper.Children())
+        {
+            if (track.trackName == trackData.trackName)
+            {
+                track.AddRangeKeyFrame(trackData);
+                break;
+            }
+        }
+    }
+
     public void SetCursorToNextFrame()
     {
         currentFrame++;
-        Debug.Log($"FRAME {currentFrame}");
         SetCursor();
     }
 
@@ -142,6 +168,16 @@ public partial class TimelineEditor : VisualElement
         {
             currentFrame = 0;
         }
+
+        _currentFrameLabel.text = currentFrame.ToString();
+        _cursor.style.left = frameMarkersWrapper[currentFrame + 1].resolvedStyle.left;
+
+        OnCursorMoved?.Invoke(currentFrame);
+    }
+
+    public void SetCursorWithoutNotification(int frameIdx)
+    {
+        currentFrame = frameIdx;
 
         _currentFrameLabel.text = currentFrame.ToString();
         _cursor.style.left = frameMarkersWrapper[currentFrame + 1].resolvedStyle.left;

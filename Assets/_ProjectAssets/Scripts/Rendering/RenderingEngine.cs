@@ -30,8 +30,6 @@ public class RenderingEngine : MonoBehaviour
             process.BeginOutputReadLine();
             process.BeginErrorReadLine();
             process.WaitForExit();
-
-            UnityEngine.Debug.Log("Done!");
         }
     }
 
@@ -39,16 +37,24 @@ public class RenderingEngine : MonoBehaviour
     {
         ImageSequenceToVideo(imageSequencePath, auxOutPath);
 
-        //Add audio to the video
-        AudioClip drivingAudio = AssetManager.Instance.drivingAudio;
-        string audioPath = Path.Combine(auxOutPath, "out.wav");
-        SavWav.Save(audioPath, drivingAudio);
-
         string outputPath = Path.Combine(mainFolder, "out.mp4");
         if (File.Exists(outputPath))
         {
             File.Delete(outputPath);
         }
+
+        //Add audio to the video
+        AudioClip drivingAudio = AssetManager.Instance.drivingAudio;
+
+        if(drivingAudio == null)
+        {
+            File.Move(Path.Combine(auxOutPath, "out.mp4"), outputPath);
+            return;
+        }
+
+        //Else add render video with audio
+        string audioPath = Path.Combine(auxOutPath, "out.wav");
+        SavWav.Save(audioPath, drivingAudio);
 
         RunFFMpeg($"-i {auxOutPath}\\out.mp4 -i {audioPath} -c copy -map 0:v:0 -map 1:a:0 {outputPath}");
     }

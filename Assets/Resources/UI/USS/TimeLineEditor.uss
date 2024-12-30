@@ -6,8 +6,23 @@
     --red-color: rgb(255, 15, 100);
     --yellow-key-color: rgb(255, 255, 0);
     --selected-key-color: rgb(255, 130, 0);
+
     --font-small: 9px;
     --font-mid: 12px;
+
+    
+    --bg-white-color: rgb(255, 255, 255);
+    --bg-lightgray-color: rgb(200, 200, 200);
+    --border-gray: rgb(155, 155, 155);
+
+     --bold-font: url("project://database/Assets/_ProjectAssets/Fonts/RedHatText-Bold.ttf?fileID=12800000&guid=1432252da56a8d2439521164898747ef&type=3#RedHatText-Bold");
+    -unity-font-definition: url("project://database/Assets/_ProjectAssets/Fonts/RedHatText-Light.ttf?fileID=12800000&guid=b47cac6b8beb6e4468c3b3f598f2fad4&type=3#RedHatText-Light");
+
+    color: black;
+}
+
+.bold {
+    -unity-font-definition: var(--bold-font);
 }
 
 .fullSize {
@@ -18,14 +33,27 @@
 #topBar {
     height: 35px;
     width: 100%;
-    background-color: var(--bg-dark-color);
+    background-color: var(--bg-white-color);
     flex-direction: row;
     justify-content: space-between;
+
+    border-width: 1px;
+    border-color: var(--border-gray);
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
 }
 
 #mainContainer {
-    background-color: var(--bg-light-color);
+    background-color: var(--bg-white-color);
     height: 90%;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-color: var(--border-gray);
+
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+
 }
 
 .topBarWrapper {
@@ -38,35 +66,21 @@
 }
 
 #playerWrapper > Button {
-    background-color: var(--bg-light-color);
-    padding-top: 4px;
-    padding-right: 4px;
-    padding-bottom: 4px;
-    padding-left: 4px;
-    width: 20px;
-    height: 20px;
+    background-color: transparent;
+    padding: 6px;
+    width: 25px;
+    height: 25px;
 }
 
 .roundedBorder {
-    border-top-left-radius: 28%;
-    border-top-right-radius: 28%;
-    border-bottom-right-radius: 28%;
-    border-bottom-left-radius: 28%;
-}
+    border-radius: 50%;
 
-.integerField {
 }
 
 .unity-integer-field__input {
-    padding-top: 4px;
-    padding-right: 4px;
-    padding-bottom: 4px;
-    padding-left: 4px;
-    background-color: var(--bg-light-color);
-    border-top-left-radius: 20%;
-    border-top-right-radius: 20%;
-    border-bottom-right-radius: 20%;
-    border-bottom-left-radius: 20%;
+    padding: 3px;
+    background-color: transparent;
+    border-radius: 10px;
 }
 
 .mediumText {
@@ -83,7 +97,7 @@
 }
 
 .greyText {
-    color: var(--white-color);
+    color: black;
     -unity-font-style: normal;
 }
 
@@ -96,6 +110,15 @@
     height: 7%;
     flex-direction: row;
     justify-content: space-between;
+    
+    background-color: var(--bg-lightgray-color);
+    color: black;
+}
+
+#frameMarkersWrapper .frame{
+    border-right-width: 0;
+    border-left-width: 1px;
+    border-color: rgb(170, 170, 170);
 }
 
 .frameMarker {
@@ -114,14 +137,18 @@
 
 .animationTrack {
     height: 10px;
-    background-color: var(--bg-dark-color);
+    background-color: var(--bg-white-color);
     margin-top: 1px;
     flex-direction: row;
     align-items: center;
     padding-top: 8px;
     padding-bottom: 8px;
-    color: var(--white-color);
+    color: black;
     font-size: var(--font-small);
+
+    border-bottom-width: 1px;
+    border-right-width: 1px;
+    border-color: var(--bg-lightgray-color);
 }
 
 #animationTracksWrapper {
@@ -205,12 +232,7 @@
     align-items: center;
 
     border-right-width: 1px;
-    border-color: var(--bg-light-color);
-}
-
-#frameMarkersWrapper .frame{
-    border-right-width: 0;
-
+    border-color: var(--bg-lightgray-color);
 }
 
 .trackName {

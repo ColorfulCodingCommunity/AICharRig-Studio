@@ -1,49 +1,38 @@
 <engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/_ProjectAssets/UI/USS/MainPage.uss?fileID=7433441132597879392&amp;guid=cd83c44992671e34ab21cbd474bf7774&amp;type=3#MainPage" />
+    <Style src="project://database/Assets/Resources/UI/USS/MainPage.uss?fileID=7433441132597879392&amp;guid=cd83c44992671e34ab21cbd474bf7774&amp;type=3#MainPage" />
     <engine:VisualElement name="Wrapper" style="flex-grow: 1; flex-direction: column;">
-        <engine:VisualElement name="Top" style="height: 45px; flex-direction: row; justify-content: space-between; padding-top: 5px; padding-right: 5px; padding-bottom: 5px; padding-left: 5px;">
-            <engine:EnumField label="Enum" value="Center" type="ScreenModeEnum, Assembly-CSharp" name="ScreenModesEnumField" style="width: 150px; -unity-font-style: bold;" />
-            <engine:Button text="Render &gt;" name="RenderBtn" class="action-button" style="background-color: rgb(108, 32, 156);" />
+        <engine:VisualElement name="Top" class="white-gray-border" style="height: 45px; flex-direction: row-reverse; justify-content: space-between; padding-top: 5px; padding-right: 5px; padding-bottom: 5px; padding-left: 5px;">
+            <engine:Button text="Render &gt;" name="RenderBtn" class="action-button bold" style="background-color: rgb(108, 32, 156); border-left-color: rgb(149, 149, 149); border-right-color: rgb(149, 149, 149); border-top-color: rgb(149, 149, 149); border-bottom-color: rgb(149, 149, 149); color: rgb(255, 255, 255); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; height: 30px; top: -4px;" />
+            <engine:Label text="AI Character Rig Tool" style="letter-spacing: -3px; -unity-font-definition: url(&quot;project://database/Assets/_ProjectAssets/Fonts/RedHatText-Bold.ttf?fileID=12800000&amp;guid=1432252da56a8d2439521164898747ef&amp;type=3#RedHatText-Bold&quot;); left: 18px; -unity-text-align: middle-left;" />
         </engine:VisualElement>
         <engine:VisualElement name="Body" style="flex-grow: 1; flex-direction: row;">
             <engine:VisualElement name="Center" style="flex-grow: 1; padding-top: 10px; padding-right: 20px; padding-bottom: 10px; padding-left: 20px;">
-                <engine:VisualElement name="VideoPreview" style="flex-grow: 1; align-items: center; justify-content: center; flex-direction: row;">
-                    <engine:VisualElement name="DrivingVideo" style="width: 200px; height: 200px; background-color: rgb(53, 53, 53); margin-top: 20px; margin-right: 20px; margin-bottom: 20px; margin-left: 20px; align-items: center; justify-content: center; background-image: url(&quot;project://database/Assets/_ProjectAssets/RenderTexture/FaceExpression.renderTexture?fileID=8400000&amp;guid=6610ef1c8efb02f43936f316659eff4f&amp;type=2#FaceExpression&quot;);" />
-                    <engine:VisualElement name="SourceAsset" style="width: 300px; height: 300px; background-color: rgba(255, 255, 255, 0.54); align-items: center; justify-content: center;">
+                <engine:VisualElement name="VideoPreview" style="flex-grow: 1; align-items: center; justify-content: center; flex-direction: row; padding-bottom: 20px;">
+                    <engine:VisualElement name="DrivingWrapper" style="flex-grow: 0; width: 250px; align-items: stretch; justify-content: center; height: 300px;">
+                        <engine:VisualElement name="DrivingVideo" class="panel" style="width: 200px; background-color: rgb(53, 53, 53); margin-top: 20px; margin-right: 20px; margin-bottom: 20px; margin-left: 20px; align-items: center; justify-content: center; background-image: url(&quot;project://database/Assets/_ProjectAssets/RenderTexture/FaceExpression.renderTexture?fileID=8400000&amp;guid=6610ef1c8efb02f43936f316659eff4f&amp;type=2#FaceExpression&quot;); height: 200px;">
+                            <engine:Slider label="Lipsync Intensity" value="42" high-value="100" name="LipsyncIntensitySlider" style="position: absolute; bottom: 0; left: 0; right: 0; width: 85%; margin-top: auto; margin-right: auto; margin-bottom: auto; margin-left: 10%; min-height: 20px;" />
+                            <engine:Slider label="Lipsync Smoothness" value="42" high-value="100" name="LipsyncSmoothnessSlider" style="position: absolute; bottom: 20px; left: 0; right: 0; width: 85%; margin-left: 10%; min-height: 20px;" />
+                        </engine:VisualElement>
+                        <engine:VisualElement name="DrivingAudio" class="panel" style="flex-grow: 1; flex-direction: row; justify-content: center; align-items: center; width: 90%; margin-top: auto; margin-right: auto; margin-bottom: auto; margin-left: auto;">
+                            <engine:VisualElement name="HasAudioWrapper" style="flex-grow: 1; height: 50px; align-items: center; justify-content: flex-start; flex-direction: row; display: none;">
+                                <engine:Button text="X" name="CloseBut" class="action-button" style="position: relative; left: auto; top: auto; border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); display: flex; color: rgb(0, 0, 0);" />
+                                <engine:Label text="audio.mp3" name="AudioTitle" />
+                            </engine:VisualElement>
+                            <engine:Button name="UploadAudioBut" style="width: 50px; height: 50px; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; align-items: center; justify-content: center; display: flex; background-color: rgb(255, 255, 255); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0;">
+                                <engine:VisualElement name="UploadIcon" style="background-image: url(&quot;project://database/Assets/_ProjectAssets/UI/Icons/upload.png?fileID=2800000&amp;guid=2af67d4d87e482741aaad93fc4de64a1&amp;type=3#upload&quot;); width: 30px; height: 30px;" />
+                                <engine:Label text="Upload Voice" style="font-size: 7px; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;" />
+                            </engine:Button>
+                        </engine:VisualElement>
+                    </engine:VisualElement>
+                    <engine:VisualElement name="SourceAsset" class="panel" style="width: 275px; height: 275px; align-items: center; justify-content: center; background-color: rgb(255, 255, 255);">
                         <engine:VisualElement name="UploadBut" style="width: 150px; height: 150px; align-items: center;">
                             <engine:VisualElement name="UploadIcon" style="background-image: url(&quot;project://database/Assets/_ProjectAssets/UI/Icons/upload.png?fileID=2800000&amp;guid=2af67d4d87e482741aaad93fc4de64a1&amp;type=3#upload&quot;); width: 95px; height: 100px;" />
                             <engine:Label text="Upload Source Asset" />
                         </engine:VisualElement>
-                        <engine:Button text="X" name="CloseBut" class="action-button" style="position: absolute; left: 10px; top: 10px; border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255);" />
+                        <engine:Button text="X" name="CloseBut" class="action-button" style="position: absolute; left: 10px; top: 10px; border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); color: rgb(255, 255, 255); background-color: rgba(0, 0, 0, 0.18); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px;" />
                     </engine:VisualElement>
                 </engine:VisualElement>
-                <engine:VisualElement name="AudioPlayer" class="panel" style="flex-direction: column; height: 150px; display: none;">
-                    <engine:VisualElement name="HasAudioWrapper" style="flex-grow: 1; display: none;">
-                        <engine:VisualElement name="AudioControlsWrapper" style="height: 40px;">
-                            <engine:VisualElement name="Controls" style="flex-grow: 1; flex-direction: row; justify-content: center;">
-                                <engine:Button text="&#10;" name="PlayButton" style="width: 40px; height: 40px;">
-                                    <engine:VisualElement style="flex-grow: 1; background-image: url(&quot;project://database/Assets/_ProjectAssets/UI/Icons/play-button-arrowhead.png?fileID=2800000&amp;guid=a3cb1cbf6dc16ae4b8e100326bb6400e&amp;type=3#play-button-arrowhead&quot;);" />
-                                </engine:Button>
-                                <engine:Button text="&#10;" name="PauseButton" style="width: 40px; height: 40px;">
-                                    <engine:VisualElement style="flex-grow: 1; background-image: url(&quot;project://database/Assets/_ProjectAssets/UI/Icons/pause.png?fileID=2800000&amp;guid=e1a89537ac9a5fd4a91ef6455492133c&amp;type=3#pause&quot;);" />
-                                </engine:Button>
-                                <engine:Button text="&#10;" name="StopButton" style="width: 40px; height: 40px; align-items: center; justify-content: center; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;">
-                                    <engine:VisualElement style="background-image: url(&quot;project://database/Assets/_ProjectAssets/UI/Icons/stop-button.png?fileID=2800000&amp;guid=a7884b6e76edcc64eb3d0d73b6af27ff&amp;type=3#stop-button&quot;); width: 25px; height: 25px;" />
-                                </engine:Button>
-                            </engine:VisualElement>
-                        </engine:VisualElement>
-                        <engine:VisualElement name="Timeline" style="background-color: rgb(159, 159, 159); height: 10px; border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; width: 500px; margin-top: 25px; left: 35px;">
-                            <engine:VisualElement name="Knob" style="width: 20px; height: 20px; position: absolute; left: 0; background-color: rgb(55, 55, 55); border-top-left-radius: 50%; border-top-right-radius: 50%; border-bottom-right-radius: 50%; border-bottom-left-radius: 50%; top: -5px;" />
-                            <engine:Label text="00:00" name="TimeCode" style="position: absolute; right: 0; top: 14px;" />
-                        </engine:VisualElement>
-                        <engine:Button text="X" name="CloseBut" class="action-button" style="position: absolute; border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); right: 0; top: -8px;" />
-                    </engine:VisualElement>
-                    <engine:Button name="UploadAudioWrapper" style="align-items: center; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; background-color: rgba(188, 188, 188, 0); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; display: flex;">
-                        <engine:VisualElement name="Icon" style="width: 75px; height: 80px; background-image: url(&quot;project://database/Assets/_ProjectAssets/UI/Icons/upload.png?fileID=2800000&amp;guid=2af67d4d87e482741aaad93fc4de64a1&amp;type=3#upload&quot;);" />
-                        <engine:Label text="Upload Audio" />
-                    </engine:Button>
-                </engine:VisualElement>
-                <TimelineEditor name="TimelineEditor" style="width: 700px; height: 250px; display: none;" />
+                <TimelineEditor name="TimelineEditor" maxFrame="100" style="width: 700px; height: 250px; display: flex;" />
             </engine:VisualElement>
             <engine:VisualElement name="ControlsWrapper" style="flex-grow: 1; padding-left: 10px; padding-right: 10px; padding-top: 20px; width: 350px; flex-direction: column-reverse; align-items: center;">
                 <engine:VisualElement name="BackEndControls" class="panel" style="width: 250px; margin-top: 25px; margin-bottom: 15px;">
@@ -55,7 +44,7 @@
                         <engine:Label text="Connect to AI Server" style="margin-left: 10px;" />
                     </engine:Button>
                 </engine:VisualElement>
-                <engine:VisualElement name="Sliders" class="panel" style="width: 250px; display: none; height: 450px;">
+                <engine:VisualElement name="Sliders" class="panel" style="width: 250px; display: flex; height: 450px; justify-content: space-between; padding-bottom: 10px;">
                     <KeyableSlider label="Left Brow" name="LeftBrowSlider" />
                     <KeyableSlider label="Right Brow" name="RightBrowSlider" />
                     <engine:VisualElement name="Spacer" style="height: 20px;" />
@@ -76,7 +65,9 @@
                     </engine:Button>
                 </engine:VisualElement>
             </engine:VisualElement>
-            <engine:Label text="SOON" name="TODO" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; align-items: center; justify-content: center; -unity-text-align: middle-center; font-size: 100px; color: rgb(255, 255, 255); background-color: rgba(0, 0, 0, 0.65); display: none;" />
+        </engine:VisualElement>
+        <engine:VisualElement name="Bottom" style="flex-grow: 1; height: 25px; flex-direction: row-reverse; justify-content: flex-start;">
+            <engine:VisualElement name="Logo" style="flex-grow: 0; width: 88px; height: 15px; background-image: url(&quot;project://database/Assets/_ProjectAssets/UI/CC_full_fundalBlack.png?fileID=2800000&amp;guid=c24380d7e8fff9748bd22e30fddcdc16&amp;type=3#CC_full_fundalBlack&quot;); right: 15px;" />
         </engine:VisualElement>
     </engine:VisualElement>
 </engine:UXML>

@@ -37,11 +37,6 @@ public class SlidersManager : MonoBehaviour
         timelineManager.OnTrackDeleted += OnTrackDeleted;
         timelineManager.OnCursorMovedEvt += OnCursorMoved;
 
-        ScreenModesController.ScreenModeChanged += (mode) =>
-        {
-            drivingFaceControls.Reset();
-        };
-
         SetupSliderEvents();
     }
 

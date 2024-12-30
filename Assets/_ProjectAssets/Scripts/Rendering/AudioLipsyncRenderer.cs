@@ -1,212 +1,185 @@
-using Cysharp.Threading.Tasks;
-using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using uLipSync;
-using UnityEngine;
-using UnityEngine.SceneManagement;
+//using Cysharp.Threading.Tasks;
+//using NUnit.Framework;
+//using System;
+//using System.Collections.Generic;
+//using System.IO;
+//using uLipSync;
+//using UnityEngine;
+//using UnityEngine.SceneManagement;
 
-public class AudioLipsyncRenderer : MonoBehaviour
-{
-    public LivePortraitManager livePortraitManager;
-    public AudioPlayerComponent audioPlayer;
+//public class AudioLipsyncRenderer : MonoBehaviour
+//{
+//    public LivePortraitManager livePortraitManager;
+//    public AudioPlayerComponent audioPlayer;
 
-    public WebsocketManager websocketManager;
-    public RenderingEngine renderingEngine;
+//    public WebsocketManager websocketManager;
+//    public RenderingEngine renderingEngine;
 
-    [Space]
-    public SkinnedMeshRenderer drivingFaceMeshRenderer;
-    public uLipSyncBlendShape lipSyncBlendShape;
+//    [Space]
+//    public SkinnedMeshRenderer drivingFaceMeshRenderer;
+//    public uLipSyncBlendShape lipSyncBlendShape;
 
-    private const int targetFrameRate = 30;
+//    private const int targetFrameRate = 30;
 
-    private float _startTime;
-    private BlendShapesRecording _recording;
-    private bool _isRecordingBlendshapes = false;
+//    private float _startTime;
+//    private bool _isRecordingBlendshapes = false;
 
-    private float _timeSinceLastRecording = 0f;
-    private bool _isWaitingForServerResponse = false;
-    private int _frameIndex;
-    private string _targetPath;
-    private string _imageSequenceTargetPath;
-    private string _auxiliaryOutFolder;
-
-    private class BlendShapeState
-    {
-        public int idx;
-        public float weight;
-    }
-    private class BlendShapesKey
-    {
-        public float timestamp;
-        public List<BlendShapeState> blendShapes;
-
-        public BlendShapesKey()
-        {
-            blendShapes = new List<BlendShapeState>();
-        }
-    }
-    private class BlendShapesRecording
-    {
-        public List<BlendShapesKey> blendShapesKeys;
-
-        public BlendShapesRecording()
-        {
-            blendShapesKeys = new List<BlendShapesKey>();
-        }
-    }
-
-    [ContextMenu("Render")]
-    public void Render(string targetPath)
-    {
-        audioPlayer.audioSource.Stop();
-        audioPlayer.audioSource.loop = false;
-        audioPlayer.shouldAutoUpdate = false;
-
-        LoadingScreen.Instance.Show();
-        LoadingScreen.Instance.SetState(0, "Simulating face expressions...");
-
-        _targetPath = targetPath;
-        PlayFrameByFrame();
-    }
-
-    private void Update()
-    {
-        //Handle Blendshapes recording
-        if (_isRecordingBlendshapes && audioPlayer.audioSource.isPlaying)
-        {
-            if ((Time.time - _timeSinceLastRecording) < 1f / targetFrameRate)
-            {
-                return;
-            }
-
-            LoadingScreen.Instance.SetState(audioPlayer.audioSource.time / audioPlayer.audioSource.clip.length, "Simulating face expressions...");
-
-            _timeSinceLastRecording = Time.time;
-            float timestamp = Time.time - _startTime;
-
-            BlendShapesKey key = new BlendShapesKey()
-            {
-                timestamp = timestamp
-            };
-
-            for (int i = 17; i <= 22; i++)
-            {
-                BlendShapeState state = new BlendShapeState()
-                {
-                    idx = i,
-                    weight = drivingFaceMeshRenderer.GetBlendShapeWeight(i)
-                };
-
-                key.blendShapes.Add(state);
-            }
-
-            _recording.blendShapesKeys.Add(key);
-            return;
-        }
-        if (_isRecordingBlendshapes && !audioPlayer.audioSource.isPlaying)
-        {
-            _isRecordingBlendshapes = false;
-
-            RecordBlendshapesToFace();
-            return;
-        }
-    }
-
-    [ContextMenu("RecordBlendshapesToFace")]
-    public async void RecordBlendshapesToFace()
-    {
-        _frameIndex = 0;
-        websocketManager.onTextureReceived += SaveTexture;
-
-        _imageSequenceTargetPath = Path.Combine(_targetPath, "raw");
-        if (Directory.Exists(_imageSequenceTargetPath))
-        {
-            Directory.Delete(_imageSequenceTargetPath, true);
-        }
-        Directory.CreateDirectory(_imageSequenceTargetPath);
+//    private float _timeSinceLastRecording = 0f;
+//    private bool _isWaitingForServerResponse = false;
+//    private int _frameIndex;
+//    private string _targetPath;
+//    private string _imageSequenceTargetPath;
+//    private string _auxiliaryOutFolder;
 
 
-        _auxiliaryOutFolder = Path.Combine(_targetPath, "output");
-        if (Directory.Exists(_auxiliaryOutFolder))
-        {
-            Directory.Delete(_auxiliaryOutFolder, true);
-        }
-        Directory.CreateDirectory(_auxiliaryOutFolder);
+//    [ContextMenu("Render")]
+//    public void Render(string targetPath)
+//    {
+//        audioPlayer.audioSource.Stop();
+//        audioPlayer.audioSource.loop = false;
+//        audioPlayer.shouldAutoUpdate = false;
+
+//        LoadingScreen.Instance.Show();
+//        LoadingScreen.Instance.SetState(0, "Simulating face expressions...");
+
+//        _targetPath = targetPath;
+//        PlayFrameByFrame();
+//    }
+
+//    private void Update()
+//    {
+//        //Handle Blendshapes recording
+//        if (_isRecordingBlendshapes && audioPlayer.audioSource.isPlaying)
+//        {
+//            if ((Time.time - _timeSinceLastRecording) < 1f / targetFrameRate)
+//            {
+//                return;
+//            }
+
+//            LoadingScreen.Instance.SetState(audioPlayer.audioSource.time / audioPlayer.audioSource.clip.length, "Simulating face expressions...");
+
+//            _timeSinceLastRecording = Time.time;
+//            float timestamp = Time.time - _startTime;
+
+//            BlendShapesKey key = new BlendShapesKey()
+//            {
+//                timestamp = timestamp
+//            };
+
+//            for (int i = 17; i <= 22; i++)
+//            {
+//                BlendShapeState state = new BlendShapeState()
+//                {
+//                    idx = i,
+//                    weight = drivingFaceMeshRenderer.GetBlendShapeWeight(i)
+//                };
+
+//                key.blendShapes.Add(state);
+//            }
+
+//            _recording.blendShapesKeys.Add(key);
+//            return;
+//        }
+//        if (_isRecordingBlendshapes && !audioPlayer.audioSource.isPlaying)
+//        {
+//            _isRecordingBlendshapes = false;
+
+//            RecordBlendshapesToFace();
+//            return;
+//        }
+//    }
+
+//    [ContextMenu("RecordBlendshapesToFace")]
+//    public async void RecordBlendshapesToFace()
+//    {
+//        _frameIndex = 0;
+//        websocketManager.onTextureReceived += SaveTexture;
+
+//        _imageSequenceTargetPath = Path.Combine(_targetPath, "raw");
+//        if (Directory.Exists(_imageSequenceTargetPath))
+//        {
+//            Directory.Delete(_imageSequenceTargetPath, true);
+//        }
+//        Directory.CreateDirectory(_imageSequenceTargetPath);
 
 
-        LoadingScreen.Instance.SetState(0, $"Rendering Images ({_frameIndex}/{_recording.blendShapesKeys.Count})");
-        
-        await UniTask.WaitForSeconds(0.5f);
-        lipSyncBlendShape.enabled = false;
-
-        foreach (var key in _recording.blendShapesKeys)
-        {
-            foreach (var state in key.blendShapes)
-            {
-                drivingFaceMeshRenderer.SetBlendShapeWeight(state.idx, state.weight);
-            }
-
-            _isWaitingForServerResponse = true;
-            livePortraitManager.TrySendImageRequest(0);
-
-            await UniTask.WaitUntil(() => !_isWaitingForServerResponse);
+//        _auxiliaryOutFolder = Path.Combine(_targetPath, "output");
+//        if (Directory.Exists(_auxiliaryOutFolder))
+//        {
+//            Directory.Delete(_auxiliaryOutFolder, true);
+//        }
+//        Directory.CreateDirectory(_auxiliaryOutFolder);
 
 
-            LoadingScreen.Instance.SetState(_frameIndex * 1.0f / _recording.blendShapesKeys.Count,
-                $"Rendering Images ({_frameIndex}/{_recording.blendShapesKeys.Count})");
-        }
+//        LoadingScreen.Instance.SetState(0, $"Rendering Images ({_frameIndex}/{_recording.blendShapesKeys.Count})");
 
-        renderingEngine.ImageSequenceToVideoAndAudio(_targetPath, _imageSequenceTargetPath, _auxiliaryOutFolder);
-        ResetState();
-    }
+//        await UniTask.WaitForSeconds(0.5f);
+//        lipSyncBlendShape.enabled = false;
 
-    private void PlayFrameByFrame()
-    {
-        if (audioPlayer.audioSource.clip == null)
-        {
-            ResetState();
-            return;
-        }
+//        foreach (var key in _recording.blendShapesKeys)
+//        {
+//            foreach (var state in key.blendShapes)
+//            {
+//                drivingFaceMeshRenderer.SetBlendShapeWeight(state.idx, state.weight);
+//            }
 
-        _startTime = Time.time;
-        _recording = new BlendShapesRecording();
-        _isRecordingBlendshapes = true;
+//            _isWaitingForServerResponse = true;
+//            livePortraitManager.TrySendImageRequest(0);
 
-        audioPlayer.audioSource.Play();
-    }
+//            await UniTask.WaitUntil(() => !_isWaitingForServerResponse);
 
-    private void ResetState()
-    {
 
-        websocketManager.onTextureReceived -= SaveTexture;
+//            LoadingScreen.Instance.SetState(_frameIndex * 1.0f / _recording.blendShapesKeys.Count,
+//                $"Rendering Images ({_frameIndex}/{_recording.blendShapesKeys.Count})");
+//        }
 
-        if (Directory.Exists(_imageSequenceTargetPath))
-        {
-            Directory.Delete(_imageSequenceTargetPath, true);
-        }
+//        renderingEngine.ImageSequenceToVideoAndAudio(_targetPath, _imageSequenceTargetPath, _auxiliaryOutFolder);
+//        ResetState();
+//    }
 
-        if (Directory.Exists(_auxiliaryOutFolder))
-        {
-            Directory.Delete(_auxiliaryOutFolder, true);
-        }
+//    private void PlayFrameByFrame()
+//    {
+//        if (audioPlayer.audioSource.clip == null)
+//        {
+//            ResetState();
+//            return;
+//        }
 
-        LoadingScreen.Instance.Hide();
-        audioPlayer.audioSource.loop = true;
-        audioPlayer.shouldAutoUpdate = true;
+//        _startTime = Time.time;
+//        _recording = new BlendShapesRecording();
+//        _isRecordingBlendshapes = true;
 
-        lipSyncBlendShape.enabled = true;
+//        audioPlayer.audioSource.Play();
+//    }
 
-    }
+//    private void ResetState()
+//    {
+//        websocketManager.onTextureReceived -= SaveTexture;
 
-    private void SaveTexture(Texture texture)
-    {
-        var fileName = "frame_" + _frameIndex++ + ".png";
+//        if (Directory.Exists(_imageSequenceTargetPath))
+//        {
+//            Directory.Delete(_imageSequenceTargetPath, true);
+//        }
 
-        var bytes = ((Texture2D)texture).EncodeToPNG();
-        File.WriteAllBytes(Path.Combine(_imageSequenceTargetPath, fileName), bytes);
+//        if (Directory.Exists(_auxiliaryOutFolder))
+//        {
+//            Directory.Delete(_auxiliaryOutFolder, true);
+//        }
 
-        _isWaitingForServerResponse = false;
-    }
-}
+//        LoadingScreen.Instance.Hide();
+//        audioPlayer.audioSource.loop = true;
+//        audioPlayer.shouldAutoUpdate = true;
+
+//        lipSyncBlendShape.enabled = true;
+//    }
+
+//    private void SaveTexture(Texture texture)
+//    {
+//        var fileName = "frame_" + _frameIndex++ + ".png";
+
+//        var bytes = ((Texture2D)texture).EncodeToPNG();
+//        File.WriteAllBytes(Path.Combine(_imageSequenceTargetPath, fileName), bytes);
+
+//        _isWaitingForServerResponse = false;
+//    }
+//}

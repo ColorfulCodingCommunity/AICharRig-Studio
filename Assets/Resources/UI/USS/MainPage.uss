@@ -8,58 +8,109 @@
     --selected-key-color: rgb(255, 130, 0);
     --font-small: 9px;
     --font-mid: 12px;
+    --bg-white-color: rgb(255, 255, 255);
+    --border-gray: rgb(155, 155, 155);
+    --bold-font: url("project://database/Assets/_ProjectAssets/Fonts/RedHatText-Bold.ttf?fileID=12800000&guid=1432252da56a8d2439521164898747ef&type=3#RedHatText-Bold");
+    -unity-font-definition: url("project://database/Assets/_ProjectAssets/Fonts/RedHatText-Light.ttf?fileID=12800000&guid=b47cac6b8beb6e4468c3b3f598f2fad4&type=3#RedHatText-Light");
+    color: rgb(0, 0, 0);
 }
 
-#ControlsWrapper{
-	font-size: var(--font-small);
+.white-gray-border {
+    background-color: var(--bg-white-color);
+    border-width: 1px;
+    border-color: var(--border-gray);
+    border-radius: 20px;
+    margin: 5px;
 }
 
-EnumField{
+#ControlsWrapper {
     font-size: var(--font-small);
 }
-EnumField .unity-base-field__label{
-    display:none;
+
+EnumField {
+    font-size: var(--font-small);
 }
 
-EnumField .unity-enum-field__text{
+EnumField .unity-base-field__label {
+    display: none;
+}
+
+EnumField .unity-enum-field__text {
     margin-right: 10px;
 }
 
-.panel{
+.panel {
     padding: 20px;
     border-radius: 20px;
-    background-color: var(--bg-light-color);
+    background-color: var(--bg-white-color);
+    border-width: 1px;
+    border-color: var(--border-gray);
 }
 
-.keyable-slider{
-    color: white;
+.bold {
+    -unity-font-definition: var(--bold-font);
 }
 
-.keyable-slider .unity-base-field:focus:enabled > .unity-base-field__label{
-    color:white;
+.keyable-slider {
+    color: black;
 }
 
-.keyable-slider .unity-slider__label{
+.keyable-slider .unity-base-field:focus:enabled > .unity-base-field__label {
+    color: black;
+}
+
+.keyable-slider .unity-slider__label {
     width: 20%;
     min-width: 75px;
 }
 
-.keyable-slider .unity-slider__input{
+.keyable-slider .unity-slider__input {
     width: 40%;
 }
 
-.action-button{
-    color: white;
-    background-color: transparent;
-    border-width: 1px;
-    border-radius: 5px;
+.unity-base-slider__tracker {
+    background-color: black;
+    border-radius: 2px;
 }
 
-.action-button #Icon{
-    background-color: #B32626;
+.unity-base-slider__dragger#unity-dragger {
+    background-color: white;
+    border-color: black;
+    border-radius: 50%;
+    border-width: 1px;
+}
+
+.action-button {
+    color: black;
+    background-color: transparent;
+    border-radius: 15px;
+    border-width: 1px;
+    border-color: var(--border-gray);
+}
+
+.action-button #Icon {
+    background-color: rgb(179, 38, 38);
     border-radius: 50%;
 }
 
-.action-button:hover{
-    background-color: var(--bg-dark-color);
+.action-button:hover {
+    background-color: var(--bg-white-color);
+}
+
+#DrivingVideo Slider .unity-base-field__label {
+    font-size: 8;
+}
+
+#DrivingVideo Slider .unity-base-field__label {
+    padding: 0;
+    margin: 0;
+    -unity-text-align: middle-left;
+    width: 75px;
+    min-width: 75px;
+}
+
+#DrivingVideo Slider .unity-base-slider__dragger {
+    width: 10px;
+    height: 10px;
+    top: 18px;
 }

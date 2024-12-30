@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
 
@@ -15,12 +16,14 @@ public partial class AnimationTrack : VisualElement
     [HideInInspector]
     public string trackName;
 
+    private bool _isFixedLengthRangeTrack = false;
+
     private List<AnimationKey> _keys = new List<AnimationKey>();
 
     private TimelineEditor _editor;
     private List<VisualElement> _frames = new List<VisualElement>();
 
-    //private List<RangeTrackData> _rangeKeyframes = new List<RangeTrackData>();
+    private List<RangeTrackData> _rangeKeyframes = new List<RangeTrackData>();
 
     private bool _isMarker = false;
 
@@ -97,26 +100,38 @@ public partial class AnimationTrack : VisualElement
 
         foreach (AnimationKey key in _keys)
         {
-            var frame = GetFrame(key.keyframeData.frameIndex);
+            var frame = GetFrame(key.keyframeData.frameIndex, out int clampedIdx);
 
             if (frame != null)
             {
                 frame.Add(key);
             }
+
+            key.keyframeData.frameIndex = clampedIdx;
+        }
+
+        foreach(RangeTrackData range in _rangeKeyframes)
+        {
+            for (int i = range.startKeyframe.frameIndex + 1; i < range.endKeyframe.frameIndex; i++)
+            {
+                var line = new VisualElement();
+                line.AddToClassList("rangeLine");
+                _frames[i].Add(line);
+            }
         }
     }
     public void MoveKeyFrame(AnimationKey key, int targetFrameIdx)
     {
-        var targetFrame = GetFrame(targetFrameIdx);
+        var targetFrame = GetFrame(targetFrameIdx, out int newTargetIdx);
         if (targetFrame == null)
         {
             return;
         }
 
-        var oldFrame = GetFrame(key.keyframeData.frameIndex);
+        var oldFrame = GetFrame(key.keyframeData.frameIndex, out int _);
         oldFrame.Remove(key);
 
-        key.keyframeData.frameIndex = targetFrameIdx;
+        key.keyframeData.frameIndex = newTargetIdx;
         targetFrame.Add(key);
 
         //foreach (var range in _rangeKeyframes)
@@ -128,9 +143,10 @@ public partial class AnimationTrack : VisualElement
         //    }
         //}
     }
+
     public void AddKeyFrame(KeyframeData<float> floatKey)
     {
-        var targetFrame = GetFrame(floatKey.frameIndex);
+        var targetFrame = GetFrame(floatKey.frameIndex, out int clampedIdx);
         if (targetFrame == null)
         {
             return;
@@ -146,24 +162,38 @@ public partial class AnimationTrack : VisualElement
         key.OnKeyDragEnd += () => OnKeyDragEnd?.Invoke(key);
     }
 
-    //private void SetRangeLines()
-    //{
+    public void AddRangeKeyFrame(RangeTrackData rangeKey)
+    {
+        _isFixedLengthRangeTrack = true;
 
-    //    foreach (var line in this.Query<VisualElement>().Class("rangeLine").ToList())
-    //    {
-    //        line.RemoveFromHierarchy();
-    //    }
+        var startFrame = GetFrame(rangeKey.startKeyframe.frameIndex, out int _);
+        var endFrame = GetFrame(rangeKey.endKeyframe.frameIndex, out int _);
 
-    //    foreach (var range in _rangeKeyframes)
-    //    {
-    //        for (int i = range.startKeyframe.frameIndex+1; i < range.endKeyframe.frameIndex; i++)
-    //        {
-    //            var line = new VisualElement();
-    //            line.AddToClassList("rangeLine");
-    //            _frames[i].Add(line);
-    //        }
-    //    }
-    //}
+        if(startFrame == null || endFrame == null)
+        {
+            Debug.LogWarning("Start or end frame is null");
+            return;
+        }
+
+        var startKey = new AnimationKey(rangeKey.startKeyframe, this);
+        startKey.AddToClassList("keyFrame");
+        _keys.Add(startKey);
+        _frames[rangeKey.startKeyframe.frameIndex].Add(startKey);
+
+        var endKey = new AnimationKey(rangeKey.endKeyframe, this);
+        endKey.AddToClassList("keyFrame");
+        _keys.Add(endKey);
+        _frames[rangeKey.endKeyframe.frameIndex].Add(endKey);
+
+        for (int i = rangeKey.startKeyframe.frameIndex + 1; i < rangeKey.endKeyframe.frameIndex; i++)
+        {
+            var line = new VisualElement();
+            line.AddToClassList("rangeLine");
+            _frames[i].Add(line);
+        }
+
+        _rangeKeyframes.Add(rangeKey);
+    }
 
     //public void AddRangeKeyFrame(RangeTrackData rangeKey)
     //{
@@ -188,7 +218,25 @@ public partial class AnimationTrack : VisualElement
 
     //        _rangeKeyframes.Add(rangeKey);
     //    }
+    //}
 
+    //private void SetRangeLines()
+    //{
+
+    //    foreach (var line in this.Query<VisualElement>().Class("rangeLine").ToList())
+    //    {
+    //        line.RemoveFromHierarchy();
+    //    }
+
+    //    foreach (var range in _rangeKeyframes)
+    //    {
+    //        for (int i = range.startKeyframe.frameIndex+1; i < range.endKeyframe.frameIndex; i++)
+    //        {
+    //            var line = new VisualElement();
+    //            line.AddToClassList("rangeLine");
+    //            _frames[i].Add(line);
+    //        }
+    //    }
     //}
 
     public void SetFrameWidth(float width)
@@ -219,9 +267,9 @@ public partial class AnimationTrack : VisualElement
         this.Add(titleWrapper);
     }
 
-    private VisualElement GetFrame(int frameIndex)
+    private VisualElement GetFrame(int frameIndex, out int clampedIdx)
     {
-        int clampedIdx = Mathf.Clamp(frameIndex, 0, _editor.maxFrame - 1);
+        clampedIdx = Mathf.Clamp(frameIndex, 0, _editor.maxFrame - 1);
         return _frames[clampedIdx];
     }
 }
