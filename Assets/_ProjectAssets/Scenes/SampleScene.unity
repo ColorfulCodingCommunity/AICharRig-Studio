@@ -1117,7 +1117,7 @@ MonoBehaviour:
   minVolume: -2.5
   maxVolume: -1.5
   smoothness: 0.101
-  usePhonemeBlend: 0
+  usePhonemeBlend: 1
 --- !u!114 &1671016621
 MonoBehaviour:
   m_ObjectHideFlags: 0
